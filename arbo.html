@@ -22,6 +22,7 @@ pre.tree{padding:5px;}
 <span class="ascii">│   ├── </span><a class="file" href="applications/arbo.apk">arbo.apk</a><a class="file" href="applications/arbo.apk" download> [↓] </a>
 <span class="ascii">│   ├── </span><a class="file" href="applications/arbo.jpg">arbo.jpg</a><a class="file" href="applications/arbo.jpg" download> [↓] </a>
 <span class="ascii">│   ├── </span><a class="file" href="applications/clavier-bluetooth.apk">clavier-bluetooth.apk</a><a class="file" href="applications/clavier-bluetooth.apk" download> [↓] </a>
+<span class="ascii">│   ├── </span><a class="file" href="applications/clavier-bluetooth.jpg">clavier-bluetooth.jpg</a><a class="file" href="applications/clavier-bluetooth.jpg" download> [↓] </a>
 <span class="ascii">│   ├── </span><a class="file" href="applications/clipboard-base64.apk">clipboard-base64.apk</a><a class="file" href="applications/clipboard-base64.apk" download> [↓] </a>
 <span class="ascii">│   ├── </span><a class="file" href="applications/clipboard-base64.jpg">clipboard-base64.jpg</a><a class="file" href="applications/clipboard-base64.jpg" download> [↓] </a>
 <span class="ascii">│   ├── </span><a class="file" href="applications/clipboard-image.apk">clipboard-image.apk</a><a class="file" href="applications/clipboard-image.apk" download> [↓] </a>
@@ -55,8 +56,7 @@ pre.tree{padding:5px;}
 <span class="ascii">│   └── </span><a class="file" href="userscripts/importer-dossier-extraire-zip.js">importer-dossier-extraire-zip.js</a><a class="file" href="userscripts/importer-dossier-extraire-zip.js" download> [↓] </a>
 <span class="ascii">├── </span><a class="file" href="favicon.png">favicon.png</a><a class="file" href="favicon.png" download> [↓] </a>
 <span class="ascii">├── </span><a class="file" href="LICENSE">LICENSE</a><a class="file" href="LICENSE" download> [↓] </a>
-<span class="ascii">├── </span><a class="file" href="make-arbo.py">make-arbo.py</a><a class="file" href="make-arbo.py" download> [↓] </a>
-<span class="ascii">└── </span><a class="file" href="README.md">README.md</a><a class="file" href="README.md" download> [↓] </a>
+<span class="ascii">└── </span><a class="file" href="make-arbo.py">make-arbo.py</a><a class="file" href="make-arbo.py" download> [↓] </a>
 </pre>
 <button id="copyarbo" style="background:#000;color:#ccc;border:none;cursor:pointer;">[Copier]</button>
 <br><textarea wrap="off" id="arbo" style="width:100%;height:200px;box-sizing:border-box;background:#000;color:#ccc;border:2px groove #888;font-family:monospace;">
@@ -65,6 +65,7 @@ android/
 │   ├── arbo.apk
 │   ├── arbo.jpg
 │   ├── clavier-bluetooth.apk
+│   ├── clavier-bluetooth.jpg
 │   ├── clipboard-base64.apk
 │   ├── clipboard-base64.jpg
 │   ├── clipboard-image.apk
@@ -98,8 +99,7 @@ android/
 │   └── importer-dossier-extraire-zip.js
 ├── favicon.png
 ├── LICENSE
-├── make-arbo.py
-└── README.md
+└── make-arbo.py
 </textarea>
 <script>function copyFrom(id,btn){var code=document.getElementById(id);var temp=document.createElement("textarea");temp.value=code.value;document.body.appendChild(temp);temp.select();try{document.execCommand("copy");}catch(err){}document.body.removeChild(temp);btn.focus();}document.getElementById("copyarbo").onclick=function(e){copyFrom("arbo",e.target);};</script>
 </body>
