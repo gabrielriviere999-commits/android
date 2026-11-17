@@ -193,17 +193,25 @@ if SYSTEME == "Windows":
         "IntlBackslash": 0x56,  # touche >/< (a gauche de Maj droit)
     }
 
-    def envoyer_touche(vk, relache):
-        """Enfonce (relache=False) ou relache (relache=True) une
-        touche a partir de son code de touche virtuel (VK)."""
-        scan = user32.MapVirtualKeyW(vk, 0)  # MAPVK_VK_TO_VSC
-        drapeaux = KEYEVENTF_KEYUP if relache else 0
+    KEYEVENTF_EXTENDEDKEY = 0x0001
 
+    # VK des touches etendues (prefixe E0 sur un vrai clavier)
+    VK_ETENDUES = {
+        0x25, 0x26, 0x27, 0x28,          # fleches
+        0x24, 0x23, 0x21, 0x22,          # Home, End, PgUp, PgDn
+        0x2D, 0x2E,                      # Insert, Delete
+        0x5B, 0x5C, 0x5D,                # Win G/D, Menu clavier
+        0xA5,                            # AltGr (VK_RMENU)
+    }
+
+    def envoyer_touche(vk, relache):
+        scan = user32.MapVirtualKeyW(vk, 0)
+        drapeaux = KEYEVENTF_KEYUP if relache else 0
+        if vk in VK_ETENDUES:
+            drapeaux |= KEYEVENTF_EXTENDEDKEY
         entree = INPUT()
         entree.type = INPUT_KEYBOARD
-        entree.ki = KEYBDINPUT(
-            vk & 0xFFFF, scan & 0xFFFF, drapeaux, 0, _pointer_nul()
-        )
+        entree.ki = KEYBDINPUT(vk & 0xFFFF, scan & 0xFFFF, drapeaux, 0, _pointer_nul())
         user32.SendInput(1, ctypes.byref(entree), ctypes.sizeof(INPUT))
 
     def envoyer_touche_scan(scan, relache):
