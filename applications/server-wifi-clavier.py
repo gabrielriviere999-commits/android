@@ -57,9 +57,7 @@ PORT = 9798
 
 SYSTEME = platform.system()
 
-# ------------------------------------------------------------
-# Drapeaux "souris" internes (communs aux deux plateformes)
-# ------------------------------------------------------------
+# Drapeaux "souris" internes (communs aux deux plateformes) #
 
 MOUSEEVENTF_MOVE = 0x0001
 MOUSEEVENTF_LEFTDOWN = 0x0002
@@ -77,10 +75,8 @@ BOUTONS = {
     3: (MOUSEEVENTF_MIDDLEDOWN, MOUSEEVENTF_MIDDLEUP),
 }
 
-# ------------------------------------------------------------
 # Couche plateforme : toutes les fonctions envoyer_* sont
-# definies ici, le reste du serveur est commun.
-# ------------------------------------------------------------
+# definies ici, le reste du serveur est commun. #
 
 if SYSTEME == "Windows":
 
@@ -445,7 +441,6 @@ def taper_touche(nom):
     envoyer_par_nom(nom, True)
 
 
-# ------------------------------------------------------------
 # Auto-repeat des touches maintenues
 #
 # Ni SendInput ni XTest ne declenchent l'auto-repeat du systeme
@@ -455,8 +450,7 @@ def taper_touche(nom):
 #
 # Les touches sont tracees PAR CLIENT : chaque client connecte
 # possede ses propres touches maintenues, et la deconnexion de
-# l'un ne relache que les siennes.
-# ------------------------------------------------------------
+# l'un ne relache que les siennes. #
 
 DELAI_REPETITION = 0.50      # delai initial avant les repetitions (s)
 INTERVALLE_REPETITION = 0.04 # intervalle entre repetitions (~25/s)
@@ -530,10 +524,8 @@ def fil_auto_repeat():
 threading.Thread(target=fil_auto_repeat, daemon=True).start()
 
 
-# ------------------------------------------------------------
 # Traitement d'une commande (commun Windows / Linux,
-# execute dans le fil du client qui a envoye la commande)
-# ------------------------------------------------------------
+# execute dans le fil du client qui a envoye la commande) #
 
 def traiter(ligne, client):
     if ligne == "PING" or ligne == "":
@@ -597,9 +589,7 @@ def traiter(ligne, client):
         print("Erreur sur '", ligne, "' :", e)
 
 
-# ------------------------------------------------------------
-# Serveur (commun Windows / Linux, multi-clients)
-# ------------------------------------------------------------
+# Serveur (commun Windows / Linux, multi-clients) #
 
 def adresse_ip_locale():
     try:
