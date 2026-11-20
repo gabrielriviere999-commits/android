@@ -58,6 +58,7 @@ import base64
 import hashlib
 import struct
 import select
+import mimetypes
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 PORT = 9798
@@ -863,21 +864,36 @@ class InterfaceWeb(BaseHTTPRequestHandler):
         if self.path == "/ws":
             self.gerer_websocket()
             return
-        if self.path not in ("/", "/index.html"):
-            self.send_error(404)
-            return
+
+        # Chemin demande, sans chaine de requete ni fragment
+        chemin = self.path.split("?")[0].split("#")[0]
+
+        # Page principale
+        if chemin in ("/", "/index.html"):
+            chemin_fichier = PAGE_WEB
+        else:
+            # Securite : interdire la remontee de repertoire
+            nom = os.path.basename(chemin.lstrip("/"))
+            chemin_fichier = os.path.join(
+                os.path.dirname(PAGE_WEB), nom)
+
+            if nom in ("index.html", "") or not os.path.isfile(chemin_fichier):
+                self.send_error(404)
+                return
+
         try:
-            with open(PAGE_WEB, "rb") as fichier:
+            with open(chemin_fichier, "rb") as fichier:
                 contenu = fichier.read()
+            type_mime = mimetypes.guess_type(chemin_fichier)[0] \
+                or "application/octet-stream"
             self.send_response(200)
-            self.send_header("Content-Type", "text/html; charset=utf-8")
+            self.send_header("Content-Type", type_mime)
             self.send_header("Content-Length", str(len(contenu)))
             self.send_header("Cache-Control", "no-store")
             self.end_headers()
             self.wfile.write(contenu)
         except OSError as erreur:
             self.send_error(500, str(erreur))
-
     def gerer_websocket(self):
         global compteur_clients
         cle = self.headers.get("Sec-WebSocket-Key")
