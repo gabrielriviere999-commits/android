@@ -30,6 +30,13 @@ button:active,button.active {
   border-color:#111 #888 #888 #111;
   background:#111;
 }
+#gameButtons .key{
+ background:var(--action-color,#222);
+}
+#gameButtons .key:active,
+#gameButtons .key.active{
+ background:#111;
+}
 #editActions{width:100%}
 input{padding:8px}
 textarea{width:100%}
@@ -172,6 +179,7 @@ select:hover{background:#444;}
     <label>Nom<input type="text" id="actionName" maxlength="30"></label>
     <label>Touche<input type="text" id="actionLabel" maxlength="12"></label>
     <label>Usage HID<input type="number" id="actionCode" min="0" max="255" step="1"></label>
+    <label>Couleur hexadécimale<input type="text" id="actionColor" maxlength="7" placeholder="#FF0000"></label>
    </div>
    <div class="game-tools">
     <button id="saveAction">Enregistrer</button>
@@ -459,7 +467,17 @@ layout.onchange=function(){
      if(a.group==="button"){
       u=typeof a.usage==="number"?a.usage:usageFromOldCode(a.code);
       if(u<0||u>255||!gameUsageName(u))continue;
-      loaded.push({id:a.id||("custom_saved_"+i),name:a.name||"",label:a.label||"",usage:u,group:"button"});
+      var actionChargee={
+       id:a.id||("custom_saved_"+i),
+       name:a.name||"",
+       label:a.label||"",
+       usage:u,
+       group:"button"
+      };
+      if(typeof a.couleur==="string"&&/^#[0-9a-fA-F]{6}$/.test(a.couleur)){
+       actionChargee.couleur=a.couleur.toUpperCase();
+      }
+      loaded.push(actionChargee);
      }else loaded.push(a);
     }
     if(loaded.length)gameActions=loaded;
@@ -467,7 +485,17 @@ layout.onchange=function(){
   }
  }catch(e){}
 }
- function makeGameButton(a){var b=document.createElement("button");b.className="key";b.setAttribute("data-game-id",a.id);b.title=a.label+" - "+a.name;b.appendChild(document.createTextNode(a.label+"\n"+a.name));return b;}
+ function makeGameButton(a){
+  var b=document.createElement("button");
+  b.className="key";
+  b.setAttribute("data-game-id",a.id);
+  b.title=a.label+" - "+a.name;
+  b.appendChild(document.createTextNode(a.label+"\n"+a.name));
+  if(a.group==="button"&&a.couleur){
+   b.style.setProperty("--action-color",a.couleur);
+  }
+  return b;
+ }
  function renderActionList(){
   var list=document.getElementById("actionList"),i,a,item,desc,up,down,edit,del,br,small,strong;
   list.innerHTML="";
@@ -500,29 +528,70 @@ layout.onchange=function(){
   renderActionList();
  }
  function openActionEditor(index){
-  var a;editingIndex=index;
-  if(index>=0){a=gameActions[index];document.getElementById("actionName").value=a.name;document.getElementById("actionLabel").value=a.label;document.getElementById("actionCode").value=a.usage;}
-  else{document.getElementById("actionName").value="";document.getElementById("actionLabel").value="";document.getElementById("actionCode").value="";}
+  var a;
+  editingIndex=index;
+  if(index>=0){
+   a=gameActions[index];
+   document.getElementById("actionName").value=a.name;
+   document.getElementById("actionLabel").value=a.label;
+   document.getElementById("actionCode").value=a.usage;
+   document.getElementById("actionColor").value=a.couleur||"";
+  }else{
+   document.getElementById("actionName").value="";
+   document.getElementById("actionLabel").value="";
+   document.getElementById("actionCode").value="";
+   document.getElementById("actionColor").value="";
+  }
  }
- function closeActionEditor(){editingIndex=-1;document.getElementById("actionName").value="";document.getElementById("actionLabel").value="";document.getElementById("actionCode").value="";}
+ function closeActionEditor(){
+  editingIndex=-1;
+  document.getElementById("actionName").value="";
+  document.getElementById("actionLabel").value="";
+  document.getElementById("actionCode").value="";
+  document.getElementById("actionColor").value="";
+ }
  document.getElementById("editActions").onclick=function(){var ed=document.getElementById("gameEditor");ed.style.display=ed.style.display==="block"?"none":"block";renderActionList();};
  document.getElementById("saveAction").onclick=function(){
   var name=document.getElementById("actionName").value.replace(/^\s+|\s+$/g,"");
   var label=document.getElementById("actionLabel").value.replace(/^\s+|\s+$/g,"");
   var usageText=document.getElementById("actionCode").value.replace(/^\s+|\s+$/g,"");
+  var color=document.getElementById("actionColor").value.replace(/^\s+|\s+$/g,"");
   var usage=parseInt(usageText,10);
-  if(!name||!label||usageText===""){alert("Remplis les trois champs.");return;}
+  if(!name||!label||usageText===""){
+   alert("Remplis les trois champs obligatoires.");
+   return;
+  }
   if(isNaN(usage)||usage<0||usage>255||String(usage)!==usageText||!gameUsageName(usage)){
-   alert("Indique un code HID valide entre 0 et 255 (ex. 40 pour Entrée).");return;
+   alert("Indique un code HID valide entre 0 et 255 (ex. 40 pour Entrée).");
+   return;
+  }
+  if(color!==""&&!/^#[0-9a-fA-F]{6}$/.test(color)){
+   alert("La couleur doit être au format hexadécimal #RRGGBB (ex. #FF0000), ou rester vide.");
+   return;
   }
   if(editingIndex>=0){
    gameActions[editingIndex].name=name;
    gameActions[editingIndex].label=label;
    gameActions[editingIndex].usage=usage;
+   if(color){
+    gameActions[editingIndex].couleur=color.toUpperCase();
+   }else{
+    delete gameActions[editingIndex].couleur;
+   }
   }else{
-   gameActions.push({id:"custom"+(new Date().getTime()),name:name,label:label,usage:usage,group:"button"});
+   var nouvelleAction={
+    id:"custom"+(new Date().getTime()),
+    name:name,
+    label:label,
+    usage:usage,
+    group:"button"
+   };
+   if(color)nouvelleAction.couleur=color.toUpperCase();
+   gameActions.push(nouvelleAction);
   }
-  closeActionEditor();saveActions();renderGame();
+  closeActionEditor();
+  saveActions();
+  renderGame();
  };
  document.getElementById("cancelAction").onclick=closeActionEditor;
  document.getElementById("addAction").onclick=function(){openActionEditor(-1);};
@@ -554,20 +623,35 @@ layout.onchange=function(){
   }
  };
  document.getElementById("exportActions").onclick=function(){
-  var customActions=[],i,a;
+  var customActions=[],i,a,action;
   for(i=0;i<gameActions.length;i++){
    a=gameActions[i];
    if(a.group==="button"){
-    customActions.push({nom:a.name,touche:a.label,usage:parseInt(a.usage,10)});
+    action={
+     nom:a.name,
+     touche:a.label,
+     usage:parseInt(a.usage,10)
+    };
+    if(a.couleur){
+     action.couleur=a.couleur;
+    }
+    customActions.push(action);
    }
   }
   document.getElementById("actionsJson").value=JSON.stringify(customActions,null,2);
  };
  document.getElementById("importActions").onclick=function(){
-  var raw=document.getElementById("actionsJson").value,parsed,i,a,clean=[],kept=[],usage;
-  try{parsed=JSON.parse(raw);}catch(err){alert("JSON invalide : vérifie la syntaxe.");return;}
+  var raw=document.getElementById("actionsJson").value;
+  var parsed,i,a,clean=[],kept=[],usage,color,action;
+  try{
+   parsed=JSON.parse(raw);
+  }catch(err){
+   alert("JSON invalide : vérifie la syntaxe.");
+   return;
+  }
   if(!parsed||typeof parsed.length!=="number"||!parsed.length){
-   alert("Le JSON doit contenir un tableau d'actions non vide.");return;
+   alert("Le JSON doit contenir un tableau d'actions non vide.");
+   return;
   }
   for(i=0;i<parsed.length;i++){
    a=parsed[i];
@@ -576,20 +660,38 @@ layout.onchange=function(){
       !a.touche.replace(/^\s+|\s+$/g,"")||
       isNaN(a.usage)||a.usage<0||a.usage>255||
       Math.floor(a.usage)!==a.usage||!gameUsageName(a.usage)){
-    alert("Action invalide à la ligne "+(i+1)+". Format attendu : nom, touche et usage (code HID numérique).");return;
+    alert("Action invalide à la ligne "+(i+1)+". Format attendu : nom, touche et usage.");
+    return;
+   }
+   color=typeof a.couleur==="string"?a.couleur.replace(/^\s+|\s+$/g,""):"";
+   if(color!==""&&!/^#[0-9a-fA-F]{6}$/.test(color)){
+    alert("Couleur invalide à la ligne "+(i+1)+". Format attendu : #RRGGBB, ou chaîne vide.");
+    return;
    }
    usage=parseInt(a.usage,10);
-   clean.push({
+   action={
     id:"custom_import_"+(new Date().getTime())+"_"+i,
     name:a.nom.replace(/^\s+|\s+$/g,""),
     label:a.touche.replace(/^\s+|\s+$/g,""),
     usage:usage,
     group:"button"
-   });
+   };
+   if(color){
+    action.couleur=color.toUpperCase();
+   }
+   clean.push(action);
   }
-  for(i=0;i<gameActions.length;i++)if(gameActions[i].group!=="button")kept.push(gameActions[i]);
-  releaseAll();joyStates.move=[];joyStates.arrows=[];gameActions=kept.concat(clean);
-  saveActions();renderGame();
+  for(i=0;i<gameActions.length;i++){
+   if(gameActions[i].group!=="button"){
+    kept.push(gameActions[i]);
+   }
+  }
+  releaseAll();
+  joyStates.move=[];
+  joyStates.arrows=[];
+  gameActions=kept.concat(clean);
+  saveActions();
+  renderGame();
   alert("Actions importées. Les raccourcis numériques et les joysticks n'ont pas été modifiés.");
  };
  var gamePointers={};
