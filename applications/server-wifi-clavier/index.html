@@ -453,7 +453,7 @@ function buildKeyboard(){
  var title=document.createElement("div");title.className="section-title";title.textContent="Navigation";full.appendChild(title);
  r=row();[["◀",80],["▶",79],["▲",82],["▼",81],["Inser",73],["Orig",74],["Pg↑",75],["Fin",77],["Pg↓",78]].forEach(function(a){add(r,a[0],a[1]);});
  title=document.createElement("div");title.className="section-title";title.textContent="Pavé numérique";full.appendChild(title);
- [["Verr Num","NumLock"],["/","NumpadDivide"],["*","NumpadMultiply"],["-","NumpadSubtract"],["7","Numpad7"],["8","Numpad8"],["9","Numpad9"],["+","NumpadAdd"],["4","Numpad4"],["5","Numpad5"],["6","Numpad6"],["",""],["1","Numpad1"],["2","Numpad2"],["3","Numpad3"],["Entrée","NumpadEnter"],["0","Numpad0"],[",","NumpadDecimal"],["",""],["",""]].forEach(function(a,i){if(i%4===0)r=row();add(r,a[0],0,a[1]);});
+ [["Verr Num","NumLock"],["/","NumpadDivide"],["*","NumpadMultiply"],["-","NumpadSubtract"],["7","Numpad7"],["8","Numpad8"],["9","Numpad9"],["+","NumpadAdd"],["4","Numpad4"],["5","Numpad5"],["6","Numpad6"],["",""],["1","Numpad1"],["2","Numpad2"],["3","Numpad3"],["Entrée","NumpadEnter"],["0","Numpad0"],[",","NumpadDecimal"],["."],["",""]].forEach(function(a,i){if(i%4===0)r=row();add(r,a[0],0,a[1]);});
 }
 layout.onchange=function(){
  releaseAll();
