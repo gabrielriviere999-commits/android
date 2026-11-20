@@ -230,7 +230,7 @@ select:hover{background:#444;}
     <label>Nom<input type="text" id="actionName" maxlength="30"></label>
     <label>Touche<input type="text" id="actionLabel" maxlength="12"></label>
     <label>Usage HID<input type="number" id="actionCode" min="0" max="255" step="1"></label>
-    <label>Couleur hexadécimale<input type="text" id="actionColor" maxlength="7" placeholder="#FF0000"><button class="previewColorPicker"></button></label>
+    <label>Couleur hexadécimale<input type="text" id="actionColor" maxlength="7" placeholder="#rrggbb"><button class="previewColorPicker"></button></label>
    </div>
    <div class="game-tools">
     <button id="saveAction">Enregistrer</button>
@@ -761,7 +761,7 @@ function makeGameButton(a){
    }
    color=typeof a.couleur==="string"?a.couleur.replace(/^\s+|\s+$/g,""):"";
    if(color!==""&&!/^#[0-9a-fA-F]{6}$/.test(color)){
-    alert("Couleur invalide à la ligne "+(i+1)+". Format attendu : #RRGGBB, ou chaîne vide.");
+    alert("Couleur invalide à la ligne "+(i+1)+". Format attendu : #rrggbb, ou chaîne vide.");
     return;
    }
    usage=parseInt(a.usage,10);
