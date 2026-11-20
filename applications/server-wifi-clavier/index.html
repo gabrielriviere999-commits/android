@@ -30,6 +30,14 @@ button:active,button.active {
   border-color:#111 #888 #888 #111;
   background:#111;
 }
+/* Touches Maj, Ctrl, Win, Alt et AltGr */
+.key-modifier{
+ background:#2D5073 !important;
+}
+/* Touches Échap, Suppr, Effacer, Tab et Entrée */
+.key-special{
+ background:#5F412D !important;
+}
 #gameButtons .key{
  background:var(--action-color,#222);
 }
@@ -342,11 +350,36 @@ function actionKey(a){
  return gameUsageName(parseInt(a.usage,10));
 }
 function makeKey(label,usage,modifier,extra){
- var b=document.createElement("button");b.className="key"+(extra?" "+extra:"");b.textContent=label;b.setAttribute("data-usage",usage||0);
+ var b=document.createElement("button");
+ b.className="key"+(extra?" "+extra:"");
+ b.textContent=label;
+ b.setAttribute("data-usage",usage||0);
+ // Couleur des touches spéciales
+ var touchesBleues=["Maj","Ctrl","Win","Alt","AltGr"];
+ var touchesMarron=["Échap","Esc","Suppr","⌫","Effacer","Tab","Entrée"];
+ if(touchesBleues.indexOf(label)!==-1){
+  b.classList.add("key-modifier");
+ }
+ else if(touchesMarron.indexOf(label)!==-1){
+  b.classList.add("key-special");
+ }
  var name=modifier||usageName(usage);
- b.addEventListener("pointerdown",function(e){e.preventDefault();b.classList.add("active");if(modifier)keyDown(modifier);else keyDown(name);try{b.setPointerCapture(e.pointerId);}catch(x){}});
- function up(e){e.preventDefault();b.classList.remove("active");if(modifier)keyUp(modifier);else keyUp(name);}
- b.addEventListener("pointerup",up);b.addEventListener("pointercancel",up);b.addEventListener("lostpointercapture",up);
+ b.addEventListener("pointerdown",function(e){
+  e.preventDefault();
+  b.classList.add("active");
+  if(modifier)keyDown(modifier);
+  else keyDown(name);
+  try{b.setPointerCapture(e.pointerId);}catch(x){}
+ });
+ function up(e){
+  e.preventDefault();
+  b.classList.remove("active");
+  if(modifier)keyUp(modifier);
+  else keyUp(name);
+ }
+ b.addEventListener("pointerup",up);
+ b.addEventListener("pointercancel",up);
+ b.addEventListener("lostpointercapture",up);
  return b;
 }
 function row(){var r=document.createElement("div");r.className="keyrow";full.appendChild(r);return r;}
