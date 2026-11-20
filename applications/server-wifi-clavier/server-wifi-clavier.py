@@ -648,11 +648,11 @@ def traiter(ligne, client):
 
         elif ligne.startswith("MouseScroll "):
             n = int(ligne[len("MouseScroll "):])
-            envoyer_souris(MOUSEEVENTF_WHEEL, donnees=n * 120)
+            envoyer_souris(MOUSEEVENTF_WHEEL, donnees=n * 60)
 
         elif ligne.startswith("MouseScrollX "):
             n = int(ligne[len("MouseScrollX "):])
-            envoyer_souris(MOUSEEVENTF_HWHEEL, donnees=n * 120)
+            envoyer_souris(MOUSEEVENTF_HWHEEL, donnees=n * 60)
 
         elif ligne.startswith("MouseDown "):
             b = int(ligne[len("MouseDown "):])
