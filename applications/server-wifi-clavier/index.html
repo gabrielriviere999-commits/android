@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Clavier Wi-Fi</title>
+<link rel="stylesheet" href="outils.css">
+<style>
+*{box-sizing:border-box;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+.small,.small *{-webkit-user-select:text;-moz-user-select:text;-ms-user-select:text;user-select:text}
+body{background:#000;color:#ccc;font-family:sans-serif;touch-action:pan-y}
+header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+h1{font-size:21px;margin:4px 0}
+.status{font-size:13px;color:#ffca68;padding:7px 10px;background:#292f36}
+.status.ok{color:#8be49b}.status.err{color:#ff8888}
+.connect{display:flex;gap:7px;flex-wrap:wrap}
+#host{flex:1;min-width:130px}
+button {
+  background:#222;
+  color:#ccc;
+  border:2px solid;
+  border-color:#888 #111 #111 #888;
+  padding:9px 10px;
+  font-size:12px;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+}
+button:hover{background:#222;}
+button:active,button.active {
+  border-color:#111 #888 #888 #111;
+  background:#111;
+}
+#editActions{width:100%}
+input{padding:8px}
+textarea{width:100%}
+input,textarea {
+  background:rgba(0,0,0,0.7);
+  color:#ccc;
+  border:2px groove #888;
+}
+select {
+  padding:8px;
+  background:#222;
+  color:#ccc;
+  border:2px solid;
+  border-color:#111 #888 #888 #111;
+}
+select:hover{background:#444;}
+#layout,#gameNumbers{margin-top:6px}
+#layout{width:100%}
+.small{font-size:12px;color:#aeb9c4;margin-top:7px}
+.toolbar{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:8px}
+.toolbar label{font-size:13px;color:#c5d0da}
+#touchpad{height:190px;background:#35424e;border:2px solid #718394;position:relative;overflow:hidden;touch-action:none;user-select:none}
+#touchpad:before{content:"PAVÉ TACTILE";position:absolute;left:0;right:0;top:42%;text-align:center;font-weight:bold;letter-spacing:1px;color:#dce5ed}
+#touchpad:after{content:"Glisser : déplacer  •  2 doigts : défiler  •  Taper : clic gauche  •  Double-taper 1 ou 2 doigts puis glisser pour clic maintenu";position:absolute;left:8px;right:8px;top:55%;text-align:center;font-size:12px;color:#c0ccd7}
+.mousebuttons{display:flex;gap:7px;margin-top:7px}
+.mousebuttons button{flex:1}
+.keyboard{display:flex;flex-direction:column;gap:5px}
+.keyrow{display:flex;gap:4px}
+.key{flex:1;min-width:0;min-height:42px;padding:5px 2px;font-size:10px;white-space:pre-line;line-height:1.15}
+.key.wide{flex:1.5}.key.xwide{flex:2}.key.space{flex:5}
+.key .sub{font-size:10px;color:#c2d0dc}
+.section-title{font-size:12px;color:#9fb0c0;margin:12px 0 6px;text-transform:uppercase;letter-spacing:1px}
+.textline{display:flex;gap:6px;margin-top:8px}
+.textline textarea{flex:1;height:200px;resize:vertical}
+#gaming{display:none}
+.hidden{display:none}
+
+.joysticks{display:flex;gap:8px;align-items:stretch}
+.joystick-wrap{display:flex;flex:1;min-width:0;align-items:center;justify-content:center;gap:6px;background:#1b2026;border:1px solid #3c4651;padding:7px;margin:7px 0}
+.joystick{width:120px;height:120px;max-width:30vw;max-height:30vw}
+@media(max-width:520px){.joystick{width:30vw;height:30vw}.joystick-wrap{gap:3px;padding:4px}}
+.joystick{width:142px;height:142px;max-width:42vw;max-height:42vw;border-radius:50%;position:relative;touch-action:none;background:#465564;border:2px solid #8293a3;box-shadow:inset 0 0 0 5px #28313a;flex-shrink:0}
+.joy-knob{position:absolute;width:48px;height:48px;border-radius:50%;left:50%;top:50%;margin:-24px 0 0 -24px;background:#8799aa;border:2px solid #d0dae3;box-shadow:0 2px 6px #000;pointer-events:none;z-index:2}
+.joy-directions{position:absolute;inset:0;pointer-events:none;color:#fff;font-size:15px;font-weight:bold;text-shadow:0 1px 3px #000}
+.joy-directions span{position:absolute;display:flex;align-items:center;justify-content:center;width:25px;height:25px;border-radius:50%;background:#202a34aa}
+.joy-directions .up{top:7px;left:50%;transform:translateX(-50%)}
+.joy-directions .left{left:7px;top:50%;transform:translateY(-50%)}
+.joy-directions .down{bottom:7px;left:50%;transform:translateX(-50%)}
+.joy-directions .right{right:7px;top:50%;transform:translateY(-50%)}
+.game-tools{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0}
+#gameEditor{display:none;margin-top:10px;padding:10px;background:#171c21;border:1px solid #596574}
+.editor-fields{display:flex;gap:6px;flex-wrap:wrap}
+.editor-fields label{display:block;flex:1;min-width:100px;font-size:12px;color:#b9c5d0}
+.editor-fields input{width:100%;margin-top:4px}
+.action-item{display:flex;align-items:center;gap:5px;padding:6px 0;border-bottom:1px solid #39434d}
+.action-item .action-name{flex:1;min-width:0;font-size:13px}
+.action-item .action-code{font-size:11px;color:#9eacb9}
+.action-item button{padding:6px 8px}.action-item .delete-action{min-width:30px;padding:6px 8px;background:#733c3c;border-color:#a96565;font-weight:bold}
+#gameButtons{display:flex;flex-direction:row;flex-wrap:wrap}
+#gameButtons .key{flex:1 1 28%}
+@media(min-width:800px){.joystick{width:142px;height:142px;max-width:none;max-height:none}}
+
+@media(min-width:800px){#touchpad{height:230px}.key{min-height:48px}}
+</style>
+</head>
+<body>
+<header><h1>⌨ Clavier Wi-Fi</h1><div id="status" class="status">Déconnecté</div></header>
+
+<section>
+ <div class="connect">
+  <input id="host" type="text" placeholder="Adresse IP du PC" autocomplete="off">
+  <button id="connect">Connecter</button>
+  <button id="disconnect">Déconnecter</button>
+ </div>
+ <div class="small">Le serveur Python doit être lancé sur le PC. Port TCP : 9798 • Passerelle web : 9800</div>
+</section>
+
+<section>
+ <div class="toolbar">
+  <button id="release">Relâcher toutes les touches</button>
+ </div>
+ <div class="textline">
+   <textarea id="textToSend" placeholder="Saisir du texte à envoyer au PC…" wrap="off"></textarea>
+   <button id="sendText">Envoyer</button>
+ </div>
+ <label><input type="checkbox" id="sendDelay">Délai avant envoi (2 secondes)</label>
+ <select id="layout"><option value="AZERTY">AZERTY</option><option value="QWERTY">QWERTY</option><option value="GAMING">GAMING</option></select>
+ <div class="section-title">Pavé tactile</div>
+ <div id="touchpad"></div>
+ <div class="mousebuttons">
+  <button data-mouse="4">Clic molette</button>
+  <button data-mouse="1">Clic gauche</button>
+  <button data-mouse="2">Clic droit</button>
+ </div>
+</section>
+
+<section>
+ <div id="fullKeyboard" class="keyboard"></div>
+ <div id="gaming">
+  <!-- <div class="section-title">Joysticks</div> -->
+  <div class="joysticks"><div class="joystick-wrap">
+   <div class="joystick" id="joyMove"><div class="joy-directions"><span class="up">Z/W</span><span class="left">Q/A</span><span class="down">S</span><span class="right">D</span></div><div class="joy-knob"></div></div>
+  </div>
+  <div class="joystick-wrap">
+   <div class="joystick" id="joyArrows"><div class="joy-directions"><span class="up">▲</span><span class="left">◀</span><span class="down">▼</span><span class="right">▶</span></div><div class="joy-knob"></div></div>
+  </div></div>
+  <!-- <div class="section-title">Actions</div> -->
+  <div id="gameButtons" class="keyboard"></div>
+  <!-- <div class="section-title">Raccourcis numériques</div> -->
+  <div id="gameNumbers" class="keyrow"></div>
+  <div class="game-tools"><button id="editActions">Modifier les actions</button></div>
+  <div id="gameEditor">
+   <strong>Personnaliser les actions</strong>
+   <div class="small">Nom : texte descriptif. Touche : libellé affiché. Usage HID : code numérique USB de la touche (ex. 40 pour Entrée, 44 pour Espace).</div>
+   <div class="game-tools">
+    <select id="actionColumns">
+     <option value="1">1 max par ligne</option>
+     <option value="2">2 max par ligne</option>
+     <option value="3">3 max par ligne</option>
+     <option value="4">4 max par ligne</option>
+     <option value="5">5 max par ligne</option>
+     <option value="6" selected>6 max par ligne</option>
+     <option value="7">7 max par ligne</option>
+     <option value="8">8 max par ligne</option>
+     <option value="9">9 max par ligne</option>
+     <option value="10">10 max par ligne</option>
+     <option value="11">11 max par ligne</option>
+     <option value="12">12 max par ligne</option>
+     <option value="13">13 max par ligne</option>
+     <option value="14">14 max par ligne</option>
+     <option value="15">15 max par ligne</option>
+     <option value="16">16 max max par ligne</option>
+     <option value="17">17 max par ligne</option>
+     <option value="18">18 max par ligne</option>
+     <option value="19">19 max par ligne</option>
+     <option value="20">20 max par ligne</option>
+    </select>
+   </div>
+   <div class="editor-fields">
+    <label>Nom<input type="text" id="actionName" maxlength="30"></label>
+    <label>Touche<input type="text" id="actionLabel" maxlength="12"></label>
+    <label>Usage HID<input type="number" id="actionCode" min="0" max="255" step="1"></label>
+   </div>
+   <div class="game-tools">
+    <button id="saveAction">Enregistrer</button>
+    <button id="cancelAction">Annuler</button>
+    <button id="addAction">Ajouter une action</button>
+   </div>
+   <div id="actionList" class="action-list"></div>
+   <div class="section-title">Importer / exporter les actions (JSON)</div>
+   <div class="small">Seules les actions personnalisées de la section « Actions » sont modifiables et exportées. Les raccourcis numériques et les deux joysticks sont indépendants et ne sont jamais inclus dans ce JSON.</div>
+   <textarea id="actionsJson" rows="9" placeholder='[{"nom":"Sauter","touche":"Espace","usage":44}]' wrap="off"></textarea>
+   <div class="game-tools">
+    <button id="exportActions">Exporter JSON</button>
+    <button id="importActions">Importer JSON</button>
+   </div>
+  </div>
+ </div>
+</section>
+
+<script>
+(function(){
+"use strict";
+var ws=null, connected=false, held={}, mouseHeld={}, pingTimer=null, reconnectTimer=null, manualDisconnect=false;
+var statusEl=document.getElementById("status");
+var full=document.getElementById("fullKeyboard");
+var layout=document.getElementById("layout");
+var currentKeyLayout="AZERTY";
+var touchpad=document.getElementById("touchpad");
+var twoFingerMoved=false;
+var sendDelay=document.getElementById("sendDelay");
+// Charger la préférence sauvegardée
+try{
+    var savedDelay=localStorage.getItem("clavierWifiSendDelay");
+    if(savedDelay!==null){
+        sendDelay.checked=savedDelay==="true";
+    }
+}catch(e){}
+// Sauvegarder à chaque changement
+sendDelay.onchange=function(){
+    try{
+        localStorage.setItem("clavierWifiSendDelay",sendDelay.checked?"true":"false");
+    }catch(e){}
+};
+var lastTap=0,lastTapX=0,lastTapY=0,dragLock=false;
+var lastTwoFingerTap=0,lastTwoFingerX=0,lastTwoFingerY=0,rightDragLock=false;
+var pointers={};
+var lastCenterX=0,lastCenterY=0;
+var twoFingerTapCenterX=0,twoFingerTapCenterY=0;
+var moved=false,multi=false,startCount=0;
+
+function status(s,kind){statusEl.textContent=s;statusEl.className="status"+(kind?" "+kind:"");}
+function send(s){if(ws&&ws.readyState===1){ws.send(s);}}
+function keyDown(name){
+ if(!name||held[name])return;
+ held[name]=true;send("SpecialKey Down "+name);
+}
+function keyUp(name){
+ if(!name||!held[name])return;
+ delete held[name];send("SpecialKey Up "+name);
+}
+function tapKey(name){send("SpecialKey Tap "+name);}
+function releaseAll(){
+ gamePointers={};
+ var k;for(k in held)if(held.hasOwnProperty(k))keyUp(k);
+ for(k in mouseHeld)if(mouseHeld.hasOwnProperty(k))mouseUp(parseInt(k,10));
+}
+function mouseDown(b){if(mouseHeld[b])return;mouseHeld[b]=true;send("MouseDown "+b);}
+function mouseUp(b){if(!mouseHeld[b])return;delete mouseHeld[b];send("MouseUp "+b);}
+function mouseMove(dx,dy){dx=Math.round(dx);dy=Math.round(dy);if(dx||dy)send("MouseMove "+dx+","+dy);}
+function scroll(n){if(n)send("MouseScroll "+n);}
+function scrollX(n){if(n)send("MouseScrollX "+n);}
+
+function scheduleReconnect(){
+ if(manualDisconnect||reconnectTimer!==null)return;
+ status("Déconnecté - reconnexion dans 3 secondes…","");
+ reconnectTimer=setTimeout(function(){reconnectTimer=null;connect(true);},3000);
+}
+function connect(isAutomatic){
+ var host=document.getElementById("host").value.replace(/^\s+|\s+$/g,""),socket,scheme;
+ if(reconnectTimer!==null){clearTimeout(reconnectTimer);reconnectTimer=null;}
+ if(!isAutomatic)manualDisconnect=false;
+ if(ws&&(ws.readyState===WebSocket.CONNECTING||ws.readyState===WebSocket.OPEN))return;
+ if(!host){status("Adresse IP manquante","err");return;}
+ scheme=location.protocol==="https:"?"wss://":"ws://";
+ try{socket=new WebSocket(scheme+host+":9800/ws");}
+ catch(e){status("Connexion impossible - nouvelle tentative dans 3 secondes…","err");scheduleReconnect();return;}
+ ws=socket;
+ status("Connexion…","");
+ socket.onopen=function(){
+  if(ws!==socket)return;
+  status("Passerelle connectée","");
+  clearInterval(pingTimer);
+  pingTimer=setInterval(function(){if(ws===socket)send("PING");},1000);
+ };
+ socket.onmessage=function(ev){
+  if(ws===socket&&ev.data.indexOf("STATUS:")===0){status(ev.data.substring(7),"ok");}
+ };
+ socket.onerror=function(){if(ws===socket)status("Erreur de connexion","err");};
+ socket.onclose=function(){
+  if(ws!==socket)return;
+  ws=null;connected=false;clearInterval(pingTimer);pingTimer=null;releaseAll();
+  if(!manualDisconnect)scheduleReconnect();else status("Déconnecté","");
+ };
+}
+function disconnect(){
+ manualDisconnect=true;
+ if(reconnectTimer!==null){clearTimeout(reconnectTimer);reconnectTimer=null;}
+ releaseAll();
+ if(ws){var old=ws;ws=null;try{old.send("Quit");old.close();}catch(e){}}
+ connected=false;clearInterval(pingTimer);pingTimer=null;status("Déconnecté","");
+}
+document.getElementById("connect").onclick=function(){connect(false);};
+document.getElementById("disconnect").onclick=disconnect;
+function usageName(u){
+ if(u>=4&&u<=29)return String.fromCharCode(97+u-4);
+ if(u>=30&&u<=39)return u===39?"0":String(u-29);
+ var m={40:"Return",41:"Esc",42:"BackSpace",43:"Tab",44:"Space",45:"-",46:"=",47:"[",48:"]",49:"\\",51:";",52:"'",53:"#",54:",",55:".",56:"/",57:"Caps",73:"Insert",74:"Home",75:"PgU",76:"Delete",77:"End",78:"PgD",79:"Right",80:"Left",81:"Down",82:"Up",83:"NumLock",84:"/",85:"*",86:"-",87:"+",88:"Return",98:"0",99:".",100:"IntlBackslash",101:"ContextMenu"};
+ if(u>=58&&u<=69)return "F"+(u-57);
+ if(u>=89&&u<=97)return String(u-88);
+ return m[u]||"";
+}
+function gameUsageName(usage){
+ var names={
+  40:"Return",41:"Esc",42:"BackSpace",43:"Tab",44:"Space",
+  45:"-",46:"=",47:"[",48:"]",49:"\\",50:"IntlHash",
+  51:";",52:"'",53:"`",54:",",55:".",56:"/",57:"Caps",
+  70:"PrintScreen",71:"ScrollLock",72:"Pause",73:"Insert",
+  74:"Home",75:"PgU",76:"Delete",77:"End",78:"PgD",
+  79:"Right",80:"Left",81:"Down",82:"Up",
+  224:"Ctrl",225:"Shift",226:"Alt",227:"Win",
+  228:"Ctrl",229:"Shift",230:"Alt",231:"Win"
+ };
+ if(usage>=4&&usage<=29)return String.fromCharCode(97+usage-4);
+ if(usage>=30&&usage<=39)return usage===39?"0":String(usage-29);
+ if(usage>=58&&usage<=69)return "F"+(usage-57);
+ return names[usage]||"";
+}
+function usageFromOldCode(code){
+ var names={
+  "Return":40,"Enter":40,"Esc":41,"BackSpace":42,"Tab":43,
+  "Space":44,"-":45,"=":46,"[":47,"]":48,"\\":49,
+  ";":51,"'":52,"`":53,",":54,".":55,"/":56,"Caps":57,
+  "Insert":73,"Home":74,"PgU":75,"Delete":76,"End":77,
+  "PgD":78,"Right":79,"Left":80,"Down":81,"Up":82,
+  "Ctrl":224,"Shift":225,"Alt":226,"Win":227
+ };
+ var i;
+ if(typeof code!=="string")return -1;
+ if(code.length===1){
+  i=code.toLowerCase().charCodeAt(0);
+  if(i>=97&&i<=122)return i-97+4;
+  if(i>=49&&i<=57)return i-49+30;
+  if(i===48)return 39;
+ }
+ if(/^F([1-9]|1[0-2])$/.test(code))return parseInt(code.substring(1),10)+57;
+ return typeof names[code]==="number"?names[code]:-1;
+}
+function actionKey(a){
+ /* Les raccourcis numériques utilisent directement leur propriété code. Les actions personnalisées utilisent leur code HID (usage). */
+ if(a.group==="number")return String(a.code!==undefined&&a.code!==null?a.code:a.label);
+ return gameUsageName(parseInt(a.usage,10));
+}
+function makeKey(label,usage,modifier,extra){
+ var b=document.createElement("button");b.className="key"+(extra?" "+extra:"");b.textContent=label;b.setAttribute("data-usage",usage||0);
+ var name=modifier||usageName(usage);
+ b.addEventListener("pointerdown",function(e){e.preventDefault();b.classList.add("active");if(modifier)keyDown(modifier);else keyDown(name);try{b.setPointerCapture(e.pointerId);}catch(x){}});
+ function up(e){e.preventDefault();b.classList.remove("active");if(modifier)keyUp(modifier);else keyUp(name);}
+ b.addEventListener("pointerup",up);b.addEventListener("pointercancel",up);b.addEventListener("lostpointercapture",up);
+ return b;
+}
+function row(){var r=document.createElement("div");r.className="keyrow";full.appendChild(r);return r;}
+function add(r,label,u,mod,cls){r.appendChild(makeKey(label,u,mod,cls));}
+function buildKeyboard(){
+ full.innerHTML="";
+ var r=row(),i;
+ ["Échap","F1","F2","F3","F4","F5","F6","F7","F8","F9","F10","F11","F12","Suppr"].forEach(function(v,i){add(r,v,[41,58,59,60,61,62,63,64,65,66,67,68,69,76][i],null,v==="Suppr"?"wide":"");});
+ r=row();
+ var nums=layout.value==="AZERTY"?["²","1\n&","2\né ~","3\n\" #","4\n {'","5\n( [","6\n- |","7\nè `","8\n_ \\","9\nç ^","0\nà @","°\n) ]", "+\n= }","⌫"]:["~\n`","!\n1","@\n2","#\n3","$\n4","%\n5","^\n6","&\n7","*\n8","(\n9",")\n0","_\n-","+\n=", "⌫"];
+ var us=[53,30,31,32,33,34,35,36,37,38,39,45,46,42];
+ nums.forEach(function(v,i){add(r,v,us[i],null,i===13?"wide":"");});
+ var az=layout.value==="AZERTY";
+ r=row();add(r,"Tab",43,null,"wide");
+ var top=az?["A","Z","E","R","T","Y","U","I","O","P"]:["Q","W","E","R","T","Y","U","I","O","P"];
+ [20,26,8,21,23,28,24,12,18,19].forEach(function(u,i){add(r,top[i],u);});
+ add(r,az?"¨\n^":"{\n[",47);add(r,az?"£\n$ ¤":"}\n]",48);
+ r=row();add(r,"Caps",57,null,"wide");
+ var middle=az?["Q","S","D","F","G","H","J","K","L","M"]:["A","S","D","F","G","H","J","K","L",":\n;"]; 
+ [4,22,7,9,10,11,13,14,15,51].forEach(function(u,i){add(r,middle[i],u);});
+ add(r,az?"%\nù":"\"\n'",52);add(r,az?"µ\n*":"|\n\\",49);add(r,"Entrée",40,null,"wide");
+ r=row();add(r,"Maj",0,"Shift","wide");
+ var bottom=az?[100,29,27,6,25,5,17,16,54,55,56]:[100,29,27,6,25,5,17,16,54,55,56];
+ var bottomLabels=az?[">\n<","W","X","C","V","B","N","?\n,", ".\n;", "/\n:", "§\n!"]:[">\n<","Z","X","C","V","B","N","M","<\n,",">\n.","?\n/"];
+ bottom.forEach(function(u,i){add(r,bottomLabels[i],u);});
+ add(r,"Maj",0,"Shift","wide");
+ r=row();add(r,"Ctrl",0,"Ctrl");add(r,"Win",0,"Win");add(r,"Alt",0,"Alt");add(r,"Espace",44,null,"space");add(r,"AltGr",0,"Menu");add(r,"Menu",101);add(r,"Ctrl",0,"Ctrl");
+ var title=document.createElement("div");title.className="section-title";title.textContent="Navigation";full.appendChild(title);
+ r=row();[["◀",80],["▶",79],["▲",82],["▼",81],["Inser",73],["Orig",74],["Pg↑",75],["Fin",77],["Pg↓",78]].forEach(function(a){add(r,a[0],a[1]);});
+ title=document.createElement("div");title.className="section-title";title.textContent="Pavé numérique";full.appendChild(title);
+ [["Verr Num","NumLock"],["/","NumpadDivide"],["*","NumpadMultiply"],["-","NumpadSubtract"],["7","Numpad7"],["8","Numpad8"],["9","Numpad9"],["+","NumpadAdd"],["4","Numpad4"],["5","Numpad5"],["6","Numpad6"],["",""],["1","Numpad1"],["2","Numpad2"],["3","Numpad3"],["Entrée","NumpadEnter"],["0","Numpad0"],[",","NumpadDecimal"],["",""],["",""]].forEach(function(a,i){if(i%4===0)r=row();add(r,a[0],0,a[1]);});
+}
+layout.onchange=function(){
+ releaseAll();
+ var gaming=layout.value==="GAMING";
+ if(!gaming)currentKeyLayout=layout.value;
+ saveLayout();
+ applyGamingLayout();
+ full.style.display=gaming?"none":"flex";
+ document.getElementById("gaming").style.display=gaming?"block":"none";
+ if(!gaming)buildKeyboard();
+};
+
+ var gameActions=[
+  {id:"moveUp",name:"Avancer",label:"Z",code:"w",group:"move"},
+  {id:"moveLeft",name:"Aller à gauche",label:"Q",code:"a",group:"move"},
+  {id:"moveDown",name:"Reculer",label:"S",code:"s",group:"move"},
+  {id:"moveRight",name:"Aller à droite",label:"D",code:"d",group:"move"},
+  {id:"arrowUp",name:"Flèche haut",label:"↑",code:"Up",group:"arrow"},
+  {id:"arrowLeft",name:"Flèche gauche",label:"←",code:"Left",group:"arrow"},
+  {id:"arrowDown",name:"Flèche bas",label:"↓",code:"Down",group:"arrow"},
+  {id:"arrowRight",name:"Flèche droite",label:"→",code:"Right",group:"arrow"},
+  {id:"Inventaire",name:"Inventaire",label:"E",usage:8,group:"button"},
+  {id:"Jeter",name:"Jeter",label:"A / Q",usage:20,group:"button"},
+  {id:"2e main",name:"2e main",label:"F",usage:9,group:"button"},
+  {id:"Chat",name:"Chat",label:"T",usage:23,group:"button"},
+  {id:"Commande",name:"Commande",label:"/",usage:56,group:"button"},
+  {id:"Menu",name:"Menu",label:"Esc",usage:41,group:"button"},
+  {id:"Joueurs",name:"Joueurs",label:"Tab",usage:43,group:"button"},
+  {id:"Cacher interface",name:"Cacher interface",label:"F1",usage:58,group:"button"},
+  {id:"Capture d'écran",name:"Capture d'écran",label:"F2",usage:59,group:"button"},
+  {id:"Debug",name:"Debug",label:"F3",usage:60,group:"button"},
+  {id:"Caméra",name:"Caméra",label:"F5",usage:62,group:"button"},
+  {id:"Plein Écran",name:"Plein Écran",label:"F11",usage:68,group:"button"},
+  {id:"S'accroupir",name:"S'accroupir",label:"Shift",usage:225,group:"button"},
+  {id:"Courir",name:"Courir",label:"Ctrl",usage:224,group:"button"},
+  {id:"Sauter",name:"Sauter",label:"Espace",usage:44,group:"button"},
+  {id:"Entrée",name:"Entrée",label:"Entrée",usage:40,group:"button"},
+  {id:"Retour arrière",name:"Retour arrière",label:"⌫",usage:42,group:"button"},
+  {id:"num1",name:"",label:"1\n&",code:"1",group:"number"},
+  {id:"num2",name:"",label:"2\né ~",code:"2",group:"number"},
+  {id:"num3",name:"",label:"3\n \" #",code:"3",group:"number"},
+  {id:"num4",name:"",label:"4\n' {",code:"4",group:"number"},
+  {id:"num5",name:"",label:"5\n( [",code:"5",group:"number"},
+  {id:"num6",name:"",label:"6\n- |",code:"6",group:"number"},
+  {id:"num7",name:"",label:"7\nè `",code:"7",group:"number"},
+  {id:"num8",name:"",label:"8\n_ \\",code:"8",group:"number"},
+  {id:"num9",name:"",label:"9\nç ^",code:"9",group:"number"},
+  {id:"num0",name:"",label:"0\nà @",code:"0",group:"number"}
+ ];
+ function applyGamingLayout(){
+  var az=currentKeyLayout==="AZERTY";
+  var labels={moveUp:az?"Z":"W",moveLeft:az?"Q":"A",moveDown:"S",moveRight:"D"};
+  var codes={moveUp:"w",moveLeft:"a",moveDown:"s",moveRight:"d"};
+  var oldCodes={moveUp:"z",moveLeft:"q",moveDown:"s",moveRight:"d"};
+  var oldLabels={moveUp:["Z","W"],moveLeft:["Q","A"],moveDown:["S"],moveRight:["D"]};
+  var i,a,id,j,known;
+  for(i=0;i<gameActions.length;i++){
+   a=gameActions[i];id=a.id;
+   if(labels[id]){
+    if(a.code===oldCodes[id]||a.code===codes[id])a.code=codes[id];
+    known=false;
+    for(j=0;j<oldLabels[id].length;j++)if(a.label===oldLabels[id][j])known=true;
+    if(known)a.label=labels[id];
+   }
+  }
+ }
+ var editingIndex=-1, joyStates={move:[],arrows:[]}, joyStart={move:null,arrows:null};
+ var maxActionColumns=6;
+ var actionColumns=document.getElementById("actionColumns");
+ function findAction(id){var i;for(i=0;i<gameActions.length;i++)if(gameActions[i].id===id)return gameActions[i];return null;}
+ function saveActions(){try{if(window.localStorage)localStorage.setItem("clavierWifiGamingActions",JSON.stringify(gameActions));}catch(e){}}
+ function saveLayout(){try{if(window.localStorage){localStorage.setItem("clavierWifiLayout",layout.value);localStorage.setItem("clavierWifiKeyLayout",currentKeyLayout);}}catch(e){}}
+ function saveActionColumns(){try{if(window.localStorage)localStorage.setItem("clavierWifiActionColumns",String(maxActionColumns));}catch(e){}}
+ function loadActionColumns(){var v,n;try{v=window.localStorage?localStorage.getItem("clavierWifiActionColumns"):null;n=parseInt(v,10);if(n>=1&&n<=20)maxActionColumns=n;}catch(e){}actionColumns.value=String(maxActionColumns);}
+ actionColumns.onchange=function(){var n=parseInt(actionColumns.value,10);if(n>=1&&n<=20){maxActionColumns=n;saveActionColumns();renderGame();}};
+ function loadLayout(){var v,k;try{v=window.localStorage?localStorage.getItem("clavierWifiLayout"):null;k=window.localStorage?localStorage.getItem("clavierWifiKeyLayout"):null;if(v==="AZERTY"||v==="QWERTY"||v==="GAMING")layout.value=v;if(k==="AZERTY"||k==="QWERTY")currentKeyLayout=k;else currentKeyLayout=layout.value==="GAMING"?"AZERTY":layout.value;}catch(e){currentKeyLayout=layout.value==="GAMING"?"AZERTY":layout.value;}}
+ function loadActions(){
+ var saved,parsed,i,a,u,loaded=[];
+ try{
+  saved=window.localStorage?localStorage.getItem("clavierWifiGamingActions"):null;
+  if(saved){
+   parsed=JSON.parse(saved);
+   if(parsed&&parsed.length){
+    for(i=0;i<parsed.length;i++){
+     a=parsed[i];
+     if(!a)continue;
+     if(a.group==="button"){
+      u=typeof a.usage==="number"?a.usage:usageFromOldCode(a.code);
+      if(u<0||u>255||!gameUsageName(u))continue;
+      loaded.push({id:a.id||("custom_saved_"+i),name:a.name||"",label:a.label||"",usage:u,group:"button"});
+     }else loaded.push(a);
+    }
+    if(loaded.length)gameActions=loaded;
+   }
+  }
+ }catch(e){}
+}
+ function makeGameButton(a){var b=document.createElement("button");b.className="key";b.setAttribute("data-game-id",a.id);b.title=a.label+" - "+a.name;b.appendChild(document.createTextNode(a.label+"\n"+a.name));return b;}
+ function renderActionList(){
+  var list=document.getElementById("actionList"),i,a,item,desc,up,down,edit,del,br,small,strong;
+  list.innerHTML="";
+  for(i=0;i<gameActions.length;i++){
+   a=gameActions[i];
+   if(a.group!=="button")continue;
+   item=document.createElement("div");item.className="action-item";
+   desc=document.createElement("div");desc.className="action-name";
+   strong=document.createElement("strong");strong.appendChild(document.createTextNode(a.name));desc.appendChild(strong);
+   br=document.createElement("br");desc.appendChild(br);
+   small=document.createElement("span");small.className="action-code";small.appendChild(document.createTextNode("Touche : "+a.label+" • Usage HID : "+a.usage));desc.appendChild(small);item.appendChild(desc);
+   up=document.createElement("button");up.appendChild(document.createTextNode("↑"));up.title="Déplacer avant";up.setAttribute("data-index",i);up.setAttribute("data-move","up");item.appendChild(up);
+   down=document.createElement("button");down.appendChild(document.createTextNode("↓"));down.title="Déplacer après";down.setAttribute("data-index",i);down.setAttribute("data-move","down");item.appendChild(down);
+   edit=document.createElement("button");edit.appendChild(document.createTextNode("Modifier"));edit.setAttribute("data-edit",i);item.appendChild(edit);
+   del=document.createElement("button");del.appendChild(document.createTextNode("×"));del.title="Supprimer cette action";del.setAttribute("data-delete",i);item.appendChild(del);list.appendChild(item);
+  }
+ }
+ function renderGame(){
+  var buttons=document.getElementById("gameButtons"),numbers=document.getElementById("gameNumbers"),i,a,b,gap;
+  buttons.innerHTML="";numbers.innerHTML="";
+  gap=5*(maxActionColumns-1)/maxActionColumns;
+  for(i=0;i<gameActions.length;i++){
+   a=gameActions[i];
+   if(a.group==="button"){
+    b=makeGameButton(a);
+    b.style.flex="1 1 calc("+(100/maxActionColumns)+"% - "+gap+"px)";
+    buttons.appendChild(b);
+   }else if(a.group==="number")numbers.appendChild(makeGameButton(a));
+  }
+  renderActionList();
+ }
+ function openActionEditor(index){
+  var a;editingIndex=index;
+  if(index>=0){a=gameActions[index];document.getElementById("actionName").value=a.name;document.getElementById("actionLabel").value=a.label;document.getElementById("actionCode").value=a.usage;}
+  else{document.getElementById("actionName").value="";document.getElementById("actionLabel").value="";document.getElementById("actionCode").value="";}
+ }
+ function closeActionEditor(){editingIndex=-1;document.getElementById("actionName").value="";document.getElementById("actionLabel").value="";document.getElementById("actionCode").value="";}
+ document.getElementById("editActions").onclick=function(){var ed=document.getElementById("gameEditor");ed.style.display=ed.style.display==="block"?"none":"block";renderActionList();};
+ document.getElementById("saveAction").onclick=function(){
+  var name=document.getElementById("actionName").value.replace(/^\s+|\s+$/g,"");
+  var label=document.getElementById("actionLabel").value.replace(/^\s+|\s+$/g,"");
+  var usageText=document.getElementById("actionCode").value.replace(/^\s+|\s+$/g,"");
+  var usage=parseInt(usageText,10);
+  if(!name||!label||usageText===""){alert("Remplis les trois champs.");return;}
+  if(isNaN(usage)||usage<0||usage>255||String(usage)!==usageText||!gameUsageName(usage)){
+   alert("Indique un code HID valide entre 0 et 255 (ex. 40 pour Entrée).");return;
+  }
+  if(editingIndex>=0){
+   gameActions[editingIndex].name=name;
+   gameActions[editingIndex].label=label;
+   gameActions[editingIndex].usage=usage;
+  }else{
+   gameActions.push({id:"custom"+(new Date().getTime()),name:name,label:label,usage:usage,group:"button"});
+  }
+  closeActionEditor();saveActions();renderGame();
+ };
+ document.getElementById("cancelAction").onclick=closeActionEditor;
+ document.getElementById("addAction").onclick=function(){openActionEditor(-1);};
+ document.getElementById("actionList").onclick=function(e){
+  var t=e.target||e.srcElement,idx,dir,tmp,buttonIndices=[],i;
+  if(t.getAttribute("data-delete")!==null){
+   idx=parseInt(t.getAttribute("data-delete"),10);
+   if(idx>=0&&idx<gameActions.length&&gameActions[idx].group==="button"){
+    keyUp(actionKey(gameActions[idx]));gameActions.splice(idx,1);
+    if(editingIndex===idx)closeActionEditor();else if(editingIndex>idx)editingIndex--;
+    saveActions();renderGame();
+   }
+   return;
+  }
+  if(t.getAttribute("data-edit")!==null){
+   idx=parseInt(t.getAttribute("data-edit"),10);
+   if(idx>=0&&idx<gameActions.length&&gameActions[idx].group==="button")openActionEditor(idx);
+   return;
+  }
+  if(t.getAttribute("data-move")!==null){
+   idx=parseInt(t.getAttribute("data-index"),10);dir=t.getAttribute("data-move");
+   for(i=0;i<gameActions.length;i++)if(gameActions[i].group==="button")buttonIndices.push(i);
+   for(i=0;i<buttonIndices.length;i++)if(buttonIndices[i]===idx)break;
+   if(i<buttonIndices.length){
+    if(dir==="up"&&i>0){tmp=gameActions[buttonIndices[i-1]];gameActions[buttonIndices[i-1]]=gameActions[idx];gameActions[idx]=tmp;}
+    if(dir==="down"&&i<buttonIndices.length-1){tmp=gameActions[buttonIndices[i+1]];gameActions[buttonIndices[i+1]]=gameActions[idx];gameActions[idx]=tmp;}
+    saveActions();renderGame();
+   }
+  }
+ };
+ document.getElementById("exportActions").onclick=function(){
+  var customActions=[],i,a;
+  for(i=0;i<gameActions.length;i++){
+   a=gameActions[i];
+   if(a.group==="button"){
+    customActions.push({nom:a.name,touche:a.label,usage:parseInt(a.usage,10)});
+   }
+  }
+  document.getElementById("actionsJson").value=JSON.stringify(customActions,null,2);
+ };
+ document.getElementById("importActions").onclick=function(){
+  var raw=document.getElementById("actionsJson").value,parsed,i,a,clean=[],kept=[],usage;
+  try{parsed=JSON.parse(raw);}catch(err){alert("JSON invalide : vérifie la syntaxe.");return;}
+  if(!parsed||typeof parsed.length!=="number"||!parsed.length){
+   alert("Le JSON doit contenir un tableau d'actions non vide.");return;
+  }
+  for(i=0;i<parsed.length;i++){
+   a=parsed[i];
+   if(!a||typeof a.nom!=="string"||typeof a.touche!=="string"||
+      typeof a.usage!=="number"||!a.nom.replace(/^\s+|\s+$/g,"")||
+      !a.touche.replace(/^\s+|\s+$/g,"")||
+      isNaN(a.usage)||a.usage<0||a.usage>255||
+      Math.floor(a.usage)!==a.usage||!gameUsageName(a.usage)){
+    alert("Action invalide à la ligne "+(i+1)+". Format attendu : nom, touche et usage (code HID numérique).");return;
+   }
+   usage=parseInt(a.usage,10);
+   clean.push({
+    id:"custom_import_"+(new Date().getTime())+"_"+i,
+    name:a.nom.replace(/^\s+|\s+$/g,""),
+    label:a.touche.replace(/^\s+|\s+$/g,""),
+    usage:usage,
+    group:"button"
+   });
+  }
+  for(i=0;i<gameActions.length;i++)if(gameActions[i].group!=="button")kept.push(gameActions[i]);
+  releaseAll();joyStates.move=[];joyStates.arrows=[];gameActions=kept.concat(clean);
+  saveActions();renderGame();
+  alert("Actions importées. Les raccourcis numériques et les joysticks n'ont pas été modifiés.");
+ };
+ var gamePointers={};
+ function gameButtonEvent(e,down){
+     var b=e.target||e.srcElement;
+     var a,name,id,p,k,stillPressed;
+     while(b&&b.getAttribute&&
+           b.getAttribute("data-game-id")===null){
+         b=b.parentNode;
+     }
+     if(!b||!b.getAttribute)return;
+     id=b.getAttribute("data-game-id");
+     a=findAction(id);
+     if(!a)return;
+     if(down){
+         e.preventDefault();
+         if(gamePointers[e.pointerId])return;
+         name=actionKey(a);
+         gamePointers[e.pointerId]={
+             id:id,
+             name:name,
+             button:b
+         };
+         b.classList.add("active");
+         keyDown(name);
+     }else{
+         p=gamePointers[e.pointerId];
+         if(!p)return;
+         delete gamePointers[e.pointerId];
+         keyUp(p.name);
+         stillPressed=false;
+         for(k in gamePointers){
+             if(gamePointers.hasOwnProperty(k)&&
+                gamePointers[k].id===p.id){
+                 stillPressed=true;
+                 break;
+             }
+         }
+         if(!stillPressed){
+             p.button.classList.remove("active");
+         }
+     }
+ }
+ var gaming=document.getElementById("gaming");
+ gaming.addEventListener("pointerdown",function(e){
+     gameButtonEvent(e,true);
+ });
+ gaming.addEventListener("pointerup",function(e){
+     gameButtonEvent(e,false);
+ });
+ gaming.addEventListener("pointercancel",function(e){
+     gameButtonEvent(e,false);
+ });
+ gaming.addEventListener("lostpointercapture",function(e){
+     gameButtonEvent(e,false);
+ });
+ function joystickSet(which,dx,dy){
+  var ids=[],old=joyStates[which],i,j,a,found;
+  if(dy<-.28)ids.push(which==="move"?"moveUp":"arrowUp");
+  if(dy>.28)ids.push(which==="move"?"moveDown":"arrowDown");
+  if(dx<-.28)ids.push(which==="move"?"moveLeft":"arrowLeft");
+  if(dx>.28)ids.push(which==="move"?"moveRight":"arrowRight");
+  for(i=0;i<old.length;i++){
+   found=false;for(j=0;j<ids.length;j++)if(old[i]===ids[j])found=true;
+   if(!found){a=findAction(old[i]);if(a)keyUp(a.code);}
+  }
+  for(i=0;i<ids.length;i++){
+   found=false;for(j=0;j<old.length;j++)if(ids[i]===old[j])found=true;
+   if(!found){a=findAction(ids[i]);if(a)keyDown(a.code);}
+  }
+  joyStates[which]=ids;
+ }
+ function joystickEnd(which,joy){var knob=joy.querySelector(".joy-knob");joystickSet(which,0,0);joyStart[which]=null;knob.style.left="50%";knob.style.top="50%";}
+ function setupJoystick(id,which){
+  var joy=document.getElementById(id),knob=joy.querySelector(".joy-knob"),cx=0,cy=0,max=1;
+  function move(e){var dx,dy,d;if(joyStart[which]===null||joyStart[which]!==e.pointerId)return;e.preventDefault();dx=(e.clientX-cx)/max;dy=(e.clientY-cy)/max;d=Math.sqrt(dx*dx+dy*dy);if(d>1){dx/=d;dy/=d;}knob.style.left=(50+dx*32)+"%";knob.style.top=(50+dy*32)+"%";joystickSet(which,dx,dy);}
+  joy.addEventListener("pointerdown",function(e){var r=joy.getBoundingClientRect();e.preventDefault();cx=r.left+r.width/2;cy=r.top+r.height/2;max=r.width*.32;joyStart[which]=e.pointerId;if(joy.setPointerCapture){try{joy.setPointerCapture(e.pointerId);}catch(x){}}move(e);});
+  joy.addEventListener("pointermove",move);
+  joy.addEventListener("pointerup",function(e){if(joyStart[which]===e.pointerId)joystickEnd(which,joy);});
+  joy.addEventListener("pointercancel",function(e){if(joyStart[which]===e.pointerId)joystickEnd(which,joy);});
+ }
+ setupJoystick("joyMove","move");setupJoystick("joyArrows","arrows");
+
+ document.querySelectorAll("[data-mouse]").forEach(function(b){
+ var n=parseInt(b.getAttribute("data-mouse"),10);
+ b.addEventListener("pointerdown",function(e){e.preventDefault();b.classList.add("active");if(n===4)mouseDown(3);else mouseDown(n);try{b.setPointerCapture(e.pointerId);}catch(x){}});
+ function up(e){b.classList.remove("active");if(n===4)mouseUp(3);else mouseUp(n);}
+ b.addEventListener("pointerup",up);b.addEventListener("pointercancel",up);
+});
+
+function pointCount(){var n=0,k;for(k in pointers)if(pointers.hasOwnProperty(k))n++;return n;}
+function centerY(){var sum=0,n=0,k;for(k in pointers)if(pointers.hasOwnProperty(k)){sum+=pointers[k].y;n++;}return n?sum/n:0;}
+function centerX(){
+    var sum=0,n=0,k;
+    for(k in pointers){
+        if(pointers.hasOwnProperty(k)){
+            sum+=pointers[k].x;
+            n++;
+        }
+    }
+    return n?sum/n:0;
+}
+touchpad.addEventListener("contextmenu",function(e){e.preventDefault();});
+touchpad.addEventListener("pointerdown",function(e){
+ e.preventDefault();touchpad.setPointerCapture(e.pointerId);pointers[e.pointerId]={x:e.clientX,y:e.clientY};
+ var n=pointCount();if(n===1){
+  moved=false;multi=false;startCount=1;dragLock=false;
+  var now=Date.now(),px=e.clientX,py=e.clientY;
+  if(lastTap && now-lastTap<320 && Math.pow(px-lastTapX,2)+Math.pow(py-lastTapY,2)<1600){
+   dragLock=true;mouseDown(1);lastTap=0;
+  }
+ }
+ else if(n>=2){
+     multi=true;
+     startCount=n;
+     twoFingerMoved=false;
+     lastCenterX=centerX();
+     lastCenterY=centerY();
+     if(n===2){
+         twoFingerTapCenterX=lastCenterX;
+         twoFingerTapCenterY=lastCenterY;
+     }
+     // Le deuxième doigt annule un éventuel maintien du clic gauche.
+     if(dragLock){mouseUp(1);dragLock=false;}
+     var now2=Date.now();
+     var ddx2=lastCenterX-lastTwoFingerX,ddy2=lastCenterY-lastTwoFingerY;
+     if(lastTwoFingerTap && now2-lastTwoFingerTap<320 && ddx2*ddx2+ddy2*ddy2<1600){
+         rightDragLock=true;
+         mouseDown(2);
+         lastTwoFingerTap=0;
+     }
+ }
+});
+touchpad.addEventListener("pointermove",function(e){
+    if(!pointers[e.pointerId])return;
+    e.preventDefault();
+    var old=pointers[e.pointerId];
+    var dx=e.clientX-old.x;
+    var dy=e.clientY-old.y;
+    pointers[e.pointerId]={
+        x:e.clientX,
+        y:e.clientY
+    };
+    if(pointCount()>=2){
+        multi=true;
+        var cx=centerX();
+        var cy=centerY();
+        var diffX=lastCenterX-cx;
+        var diffY=lastCenterY-cy;
+        if(Math.abs(diffX)>2 || Math.abs(diffY)>2){
+            twoFingerMoved=true;
+        }
+        if(rightDragLock){
+            mouseMove(-diffX*2.2,-diffY*2.2);
+            lastCenterX=cx;
+            lastCenterY=cy;
+            return;
+        }
+        // Calcul de l'angle du déplacement
+        var angle=Math.atan2(Math.abs(diffY),Math.abs(diffX))*180/Math.PI;
+        // Réglage de l'angle de séparation
+        var angleMax=30;
+        if(angle<angleMax){
+            // Défilement horizontal
+            var amountX=Math.round(diffX/18);
+            if(amountX){
+                scrollX(amountX);
+                lastCenterX=cx;
+                lastCenterY=cy;
+            }
+        }
+        else if(angle>(90-angleMax)){
+            // Défilement vertical
+            var amountY=Math.round(diffY/18);
+            if(amountY){
+                scroll(amountY);
+                lastCenterX=cx;
+                lastCenterY=cy;
+            }
+        }
+    }
+    else if(!multi){
+        if(Math.abs(dx)+Math.abs(dy)>1){
+            moved=true;
+            mouseMove(dx*2.2,dy*2.2);
+        }
+    }
+});
+function pointerEnd(e){
+ if(!pointers[e.pointerId])return;
+ var wasMulti=multi,wasMoved=moved;
+ var endCenterX=centerX(),endCenterY=centerY();
+ delete pointers[e.pointerId];
+ if(pointCount()===0){
+  if(dragLock){mouseUp(1);dragLock=false;}
+  else if(rightDragLock){
+      mouseUp(2);
+      rightDragLock=false;
+      lastTwoFingerTap=0;
+  }
+  else if(!wasMoved){
+      if(wasMulti){
+          if(!twoFingerMoved){
+              mouseDown(2);
+              mouseUp(2);
+              lastTwoFingerTap=Date.now();
+              // Mémoriser le centre lorsque les deux doigts étaient encore présents.
+              // À la fin du geste, un doigt a déjà été retiré des pointeurs.
+              lastTwoFingerX=twoFingerTapCenterX;
+              lastTwoFingerY=twoFingerTapCenterY;
+          }
+      }
+      else{
+          mouseDown(1);
+          mouseUp(1);
+          lastTap=Date.now();
+          lastTapX=e.clientX;
+          lastTapY=e.clientY;
+      }
+  }
+  multi=false;moved=false;
+ }
+}
+touchpad.addEventListener("pointerup",pointerEnd);
+touchpad.addEventListener("pointercancel",pointerEnd);
+var sendDelayTimer=null;
+document.getElementById("sendText").onclick=function(){
+    var field=document.getElementById("textToSend");
+    var button=document.getElementById("sendText");
+    var delay=document.getElementById("sendDelay");
+    var value=field.value;
+    var encoded;
+    if(!value)return;
+    if(!ws||ws.readyState!==1){
+        status("PC non connecté","err");
+        return;
+    }
+    // Encoder le texte en UTF-8/Base64
+    try{
+        encoded=btoa(unescape(encodeURIComponent(value)));
+    }catch(e){
+        status("Impossible d'encoder le texte","err");
+        return;
+    }
+    function envoyer(){
+        sendDelayTimer=null;
+        if(!ws||ws.readyState!==1){
+            status("PC non connecté","err");
+            button.disabled=false;
+            button.textContent="Envoyer";
+            return;
+        }
+        send("TypeString64 "+encoded);
+        field.value="";
+        button.disabled=false;
+        button.textContent="Envoyer";
+    }
+    if(delay.checked){
+        button.disabled=true;
+        var remaining=2;
+        button.textContent="Envoi dans "+remaining+"s";
+        sendDelayTimer=setInterval(function(){
+            remaining--;
+            if(remaining>0){
+                button.textContent="Envoi dans "+remaining+"s";
+            }else{
+                clearInterval(sendDelayTimer);
+                envoyer();
+            }
+        },1000);
+    }else{
+        envoyer();
+    }
+};
+window.addEventListener("blur",releaseAll);
+document.addEventListener("visibilitychange",function(){if(document.hidden)releaseAll();});
+loadLayout();saveLayout();loadActions();loadActionColumns();applyGamingLayout();saveActions();renderGame();
+full.style.display=layout.value==="GAMING"?"none":"flex";document.getElementById("gaming").style.display=layout.value==="GAMING"?"block":"none";
+buildKeyboard();
+ if(location.hostname){document.getElementById("host").value=location.hostname;}
+ manualDisconnect=false;
+ connect(true);
+})();
+</script>
+</body>
+</html>
