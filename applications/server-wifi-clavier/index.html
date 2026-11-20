@@ -36,7 +36,23 @@ button:active,button.active {
 }
 /* Touches Échap, Suppr, Effacer, Tab et Entrée */
 .key-special{
- background:#5F412D !important;
+ background:#5f412d !important;
+}
+/* Actions Gaming par défaut */
+#gameButtons .key.game-blue{
+ background:#2d5073;
+}
+#gameButtons .key.game-brown{
+ background:#5f412d;
+}
+#gameButtons .key.game-green{
+ background:#356b45;
+}
+/* État appuyé */
+#gameButtons .key.game-blue.active,
+#gameButtons .key.game-brown.active,
+#gameButtons .key.game-green.active{
+ filter:brightness(0.75);
 }
 #gameButtons .key{
  background:var(--action-color,#222);
@@ -518,17 +534,33 @@ layout.onchange=function(){
   }
  }catch(e){}
 }
- function makeGameButton(a){
+function makeGameButton(a){
   var b=document.createElement("button");
   b.className="key";
+  // 1. Priorité à la couleur personnalisée
+  if(a.group==="button" && a.couleur){
+    b.style.setProperty("--action-color", a.couleur);
+  }
+  // 2. Sinon, couleurs Gaming par défaut
+  else {
+    var blueActions=["Inventaire","Jeter","2e main"];
+    var brownActions=["Menu","Joueurs","Entrée","Retour arrière"];
+    var greenActions=["S'accroupir","Courir","Sauter"];
+    if(blueActions.indexOf(a.name)!==-1){
+      b.classList.add("game-blue");
+    }
+    else if(brownActions.indexOf(a.name)!==-1){
+      b.classList.add("game-brown");
+    }
+    else if(greenActions.indexOf(a.name)!==-1){
+      b.classList.add("game-green");
+    }
+  }
   b.setAttribute("data-game-id",a.id);
   b.title=a.label+" - "+a.name;
   b.appendChild(document.createTextNode(a.label+"\n"+a.name));
-  if(a.group==="button"&&a.couleur){
-   b.style.setProperty("--action-color",a.couleur);
-  }
   return b;
- }
+}
  function renderActionList(){
   var list=document.getElementById("actionList"),i,a,item,desc,up,down,edit,del,br,small,strong;
   list.innerHTML="";
