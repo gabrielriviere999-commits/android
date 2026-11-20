@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Clavier Wi-Fi</title>
-<link rel="stylesheet" href="outils.css">
+<link rel="stylesheet" href="color-palette.css">
 <style>
 *{box-sizing:border-box;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
 .small,.small *{-webkit-user-select:text;-moz-user-select:text;-ms-user-select:text;user-select:text}
@@ -127,6 +127,33 @@ select:hover{background:#444;}
 </style>
 </head>
 <body>
+<div class="overlayColorPicker">
+  <div class="overlayColorPicker-cell">
+    <div class="mini-picker" id="miniPicker">
+      <div class="sv-box" id="svBox">
+        <div class="sv-cursor" id="svCursor"></div>
+      </div>
+      <div class="hue-slider" id="hueSlider">
+        <div class="hue-cursor" id="hueCursor"></div>
+      </div>
+      <div class="alpha-slider" id="alphaSlider">
+        <div class="alpha-cursor" id="alphaCursor"></div>
+      </div>
+        <div class="quick-colors">
+        <button class="qc" data-col="#000000" style="background:#000000"></button>
+        <button class="qc" data-col="#ffffff" style="background:#ffffff"></button>
+        <button class="qc" data-col="#ff0000" style="background:#ff0000"></button>
+        <button class="qc" data-col="#ff9900" style="background:#ff9900"></button>
+        <button class="qc" data-col="#ffff00" style="background:#ffff00"></button>
+        <button class="qc" data-col="#00ff00" style="background:#00ff00"></button>
+        <button class="qc" data-col="#00ffff" style="background:#00ffff"></button>
+        <button class="qc" data-col="#0000ff" style="background:#0000ff"></button>
+        <button class="qc" data-col="#ff00ff" style="background:#ff00ff"></button>
+      </div>
+      <button id="closePickerBtn" onclick="closePicker()">Fermer</button>
+    </div>
+  </div>
+</div>
 <header><h1>⌨ Clavier Wi-Fi</h1><div id="status" class="status">Déconnecté</div></header>
 
 <section>
@@ -203,7 +230,7 @@ select:hover{background:#444;}
     <label>Nom<input type="text" id="actionName" maxlength="30"></label>
     <label>Touche<input type="text" id="actionLabel" maxlength="12"></label>
     <label>Usage HID<input type="number" id="actionCode" min="0" max="255" step="1"></label>
-    <label>Couleur hexadécimale<input type="text" id="actionColor" maxlength="7" placeholder="#FF0000"></label>
+    <label>Couleur hexadécimale<input type="text" id="actionColor" maxlength="7" placeholder="#FF0000"><button class="previewColorPicker"></button></label>
    </div>
    <div class="game-tools">
     <button id="saveAction">Enregistrer</button>
@@ -221,8 +248,9 @@ select:hover{background:#444;}
   </div>
  </div>
 </section>
-
+<script src="color-palette.js"></script>
 <script>
+
 (function(){
 "use strict";
 var ws=null, connected=false, held={}, mouseHeld={}, pingTimer=null, reconnectTimer=null, manualDisconnect=false;
@@ -233,6 +261,9 @@ var currentKeyLayout="AZERTY";
 var touchpad=document.getElementById("touchpad");
 var twoFingerMoved=false;
 var sendDelay=document.getElementById("sendDelay");
+var actionColor = document.getElementById("actionColor");
+attachColorPickerTo(document.getElementById("actionColor"));
+updatePickerFromInput(actionColor, actionColor.nextElementSibling);
 // Charger la préférence sauvegardée
 try{
     var savedDelay=localStorage.getItem("clavierWifiSendDelay");
