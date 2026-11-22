@@ -158,6 +158,8 @@ if SYSTEME == "Windows":
         "Return": 0x0D, "BackSpace": 0x08, "Tab": 0x09, "Space": 0x20,
         "Esc": 0x1B, "Caps": 0x14,
         "Shift": 0x10, "Ctrl": 0x11, "Alt": 0x12,
+        "Shift_R": 0xA1,               # Maj droit (VK_RSHIFT, etendu)
+        "Ctrl_R": 0xA3,                # Ctrl droit (VK_RCONTROL, etendu)
         "Win": 0x5B, "Menu": 0xA5,   # Menu = AltGr (VK_RMENU)
         "ContextMenu": 0x5D,         # touche Menu du clavier (VK_APPS)
         "Left": 0x25, "Up": 0x26, "Right": 0x27, "Down": 0x28,
@@ -226,6 +228,7 @@ if SYSTEME == "Windows":
         0x25, 0x26, 0x27, 0x28,          # fleches
         0x24, 0x23, 0x21, 0x22,          # Home, End, PgUp, PgDn
         0x2D, 0x2E,                      # Insert, Delete
+        0xA1, 0xA3,                      # Maj droit, Ctrl droit
         0x5B, 0x5C, 0x5D,                # Win G/D, Menu clavier
         0xA5,                            # AltGr (VK_RMENU)
         0x6F,                            # NumpadDivide
@@ -344,6 +347,8 @@ elif SYSTEME == "Linux":
         "Return": 0xFF0D, "BackSpace": 0xFF08, "Tab": 0xFF09,
         "Space": 0x20, "Esc": 0xFF1B, "Caps": 0xFFE5,
         "Shift": 0xFFE1, "Ctrl": 0xFFE3, "Alt": 0xFFE9,
+        "Shift_R": 0xFFE2,                # XK_Shift_R
+        "Ctrl_R": 0xFFE4,                 # XK_Control_R
         "Win": 0xFFE7,                     # Super_L
         "Menu": XK_ISO_Level3_Shift,       # Menu = AltGr sous X11
         "ContextMenu": 0xFF67,             # touche Menu (XK_Menu)
