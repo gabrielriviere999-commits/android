@@ -32,8 +32,11 @@ button:active,button.active {
 }
 /* Touches Maj, Ctrl, Win, Alt et AltGr */
 .key-modifier{
- background:#2D5073 !important;
+ background:#2d5073!important;
 }
+.key.caps{flex:2}
+.key.majGauche{flex:1.2}
+.key.majDroite{flex:3.6}
 /* Touches Échap, Suppr, Effacer, Tab et Entrée */
 .key-special{
  background:#5f412d !important;
@@ -440,16 +443,16 @@ function buildKeyboard(){
  r=row();add(r,"Tab",43,null,"wide");
  var top=az?["A","Z","E","R","T","Y","U","I","O","P"]:["Q","W","E","R","T","Y","U","I","O","P"];
  [20,26,8,21,23,28,24,12,18,19].forEach(function(u,i){add(r,top[i],u);});
- add(r,az?"¨\n^":"{\n[",47);add(r,az?"£\n$ ¤":"}\n]",48);
- r=row();add(r,"Caps",57,null,"wide");
- var middle=az?["Q","S","D","F","G","H","J","K","L","M"]:["A","S","D","F","G","H","J","K","L",":\n;"]; 
+ add(r,az?"¨\n^":"{\n[",47);add(r,az?"£\n$ ¤":"}\n]",48);add(r,"Entrée",40,null,"wide");
+ r=row();add(r,"Caps",57,null,"caps");
+ var middle=az?["Q","S","D","F","G","H","J","K","L","M"]:["A","S","D","F","G","H","J","K","L",":\n;"];
  [4,22,7,9,10,11,13,14,15,51].forEach(function(u,i){add(r,middle[i],u);});
  add(r,az?"%\nù":"\"\n'",52);add(r,az?"µ\n*":"|\n\\",49);add(r,"Entrée",40,null,"wide");
- r=row();add(r,"Maj",0,"Shift","wide");
+ r=row();add(r,"Maj",0,"Shift","majGauche");
  var bottom=az?[100,29,27,6,25,5,17,16,54,55,56]:[100,29,27,6,25,5,17,16,54,55,56];
  var bottomLabels=az?[">\n<","W","X","C","V","B","N","?\n,", ".\n;", "/\n:", "§\n!"]:[">\n<","Z","X","C","V","B","N","M","<\n,",">\n.","?\n/"];
  bottom.forEach(function(u,i){add(r,bottomLabels[i],u);});
- add(r,"Maj",0,"Shift_R","wide");
+ add(r,"Maj",0,"Shift_R","majDroite");
  r=row();add(r,"Ctrl",0,"Ctrl");add(r,"Win",0,"Win");add(r,"Alt",0,"Alt");add(r,"Espace",44,null,"space");add(r,"AltGr",0,"Menu");add(r,"Menu",101);add(r,"Ctrl",0,"Ctrl_R");
  var title=document.createElement("div");title.className="section-title";title.textContent="Navigation";full.appendChild(title);
  r=row();[["◀",80],["▶",79],["▲",82],["▼",81],["Inser",73],["Orig",74],["Pg↑",75],["Fin",77],["Pg↓",78]].forEach(function(a){add(r,a[0],a[1]);});
