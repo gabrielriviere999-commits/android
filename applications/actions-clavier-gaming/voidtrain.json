@@ -1,0 +1,97 @@
+[
+  {
+    "nom": "Outils",
+    "touche": "T",
+    "usage": 23
+  },
+  {
+    "nom": "Recharger",
+    "touche": "R",
+    "usage": 21,
+    "couleur": "#990000"
+  },
+  {
+    "nom": "Mode de tir",
+    "touche": "G",
+    "usage": 10,
+    "couleur": "#990000"
+  },
+  {
+    "nom": "Consommables",
+    "touche": "A",
+    "usage": 20,
+    "couleur": "#2D5073"
+  },
+  {
+    "nom": "Corps à corps / Rappel",
+    "touche": "F",
+    "usage": 9
+  },
+  {
+    "nom": "Interagir",
+    "touche": "E",
+    "usage": 8,
+    "couleur": "#2D5073"
+  },
+  {
+    "nom": "Construction (Livre)",
+    "touche": "B",
+    "usage": 5
+  },
+  {
+    "nom": "Marteau (Réparer)",
+    "touche": "N",
+    "usage": 17
+  },
+  {
+    "nom": "Train lourd",
+    "touche": "X",
+    "usage": 27
+  },
+  {
+    "nom": "Inventaire",
+    "touche": "I",
+    "usage": 12
+  },
+  {
+    "nom": "Journal",
+    "touche": "J",
+    "usage": 13
+  },
+  {
+    "nom": "Arme 1",
+    "touche": "1",
+    "usage": 30
+  },
+  {
+    "nom": "Arme 2",
+    "touche": "2",
+    "usage": 31
+  },
+  {
+    "nom": "Revolver",
+    "touche": "3",
+    "usage": 32,
+    "couleur": "#990000"
+  },
+  {
+    "nom": "S'accroupir",
+    "touche": "Shift",
+    "usage": 225
+  },
+  {
+    "nom": "Courir",
+    "touche": "Ctrl",
+    "usage": 224
+  },
+  {
+    "nom": "Sauter",
+    "touche": "Espace",
+    "usage": 44
+  },
+  {
+    "nom": "Menu",
+    "touche": "Esc",
+    "usage": 41
+  }
+]
