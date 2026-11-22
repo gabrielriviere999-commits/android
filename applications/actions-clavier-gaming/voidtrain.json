@@ -54,6 +54,16 @@
     "usage": 12
   },
   {
+    "nom": "Menu",
+    "touche": "Esc",
+    "usage": 41
+  },
+  {
+    "nom": "Chat",
+    "touche": "Entrée",
+    "usage": 40
+  },
+  {
     "nom": "Journal",
     "touche": "J",
     "usage": 13
@@ -90,10 +100,5 @@
     "nom": "Sauter",
     "touche": "Espace",
     "usage": 44
-  },
-  {
-    "nom": "Menu",
-    "touche": "Esc",
-    "usage": 41
   }
 ]
