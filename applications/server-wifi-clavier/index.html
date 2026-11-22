@@ -115,6 +115,7 @@ select:hover{background:#444;}
 .action-item .action-name{flex:1;min-width:0;font-size:13px}
 .action-item .action-code{font-size:11px;color:#9eacb9}
 .action-item button{padding:6px 8px}.action-item .delete-action{min-width:30px;padding:6px 8px;background:#733c3c;border-color:#a96565;font-weight:bold}
+#actionList{overflow-y:auto;max-height:500px;max-height:70vh}
 #gameButtons{display:flex;flex-direction:row;flex-wrap:wrap}
 #gameButtons .key{flex:1 1 28%}
 @media(min-width:800px){.joystick{width:142px;height:142px;max-width:none;max-height:none}}
@@ -233,7 +234,7 @@ select:hover{background:#444;}
     <button id="cancelAction">Annuler</button>
     <button id="addAction">Ajouter une action</button>
    </div>
-   <div id="actionList" class="action-list"></div>
+   <div id="actionList"></div>
    <div class="section-title">Importer / exporter les actions (JSON)</div>
    <div class="small">Seules les actions personnalisées de la section « Actions » sont modifiables et exportées. Les raccourcis numériques et les deux joysticks sont indépendants et ne sont jamais inclus dans ce JSON.</div>
    <textarea id="actionsJson" rows="9" placeholder='[{"nom":"Sauter","touche":"Espace","usage":44}]' wrap="off"></textarea>
