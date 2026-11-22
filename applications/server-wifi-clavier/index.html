@@ -225,7 +225,7 @@ select:hover{background:#444;}
    <div class="editor-fields">
     <label>Nom<input type="text" id="actionName" maxlength="30"></label>
     <label>Touche<input type="text" id="actionLabel" maxlength="12"></label>
-    <label>Usage HID<input type="number" id="actionCode" min="0" max="255" step="1"></label>
+    <label>Usage HID<input type="number" id="actionCode" step="1"></label>
     <label>Couleur hexadécimale<input type="text" id="actionColor" maxlength="7" placeholder="#rrggbb"><button class="previewColorPicker"></button></label>
    </div>
    <div class="game-tools">
@@ -542,7 +542,7 @@ layout.onchange=function(){
      if(!a)continue;
      if(a.group==="button"){
       u=typeof a.usage==="number"?a.usage:usageFromOldCode(a.code);
-      if(u<0||u>255||!gameUsageName(u))continue;
+      if(isNaN(u)||Math.floor(u)!==u)continue;
       var actionChargee={
        id:a.id||("custom_saved_"+i),
        name:a.name||"",
@@ -653,10 +653,6 @@ function makeGameButton(a){
    alert("Remplis les trois champs obligatoires.");
    return;
   }
-  if(isNaN(usage)||usage<0||usage>255||String(usage)!==usageText||!gameUsageName(usage)){
-   alert("Indique un code HID valide entre 0 et 255 (ex. 40 pour Entrée).");
-   return;
-  }
   if(color!==""&&!/^#[0-9a-fA-F]{6}$/.test(color)){
    alert("La couleur doit être au format hexadécimal #RRGGBB (ex. #FF0000), ou rester vide.");
    return;
@@ -750,8 +746,8 @@ function makeGameButton(a){
    if(!a||typeof a.nom!=="string"||typeof a.touche!=="string"||
       typeof a.usage!=="number"||!a.nom.replace(/^\s+|\s+$/g,"")||
       !a.touche.replace(/^\s+|\s+$/g,"")||
-      isNaN(a.usage)||a.usage<0||a.usage>255||
-      Math.floor(a.usage)!==a.usage||!gameUsageName(a.usage)){
+      isNaN(a.usage)||
+      Math.floor(a.usage)!==a.usage){
     alert("Action invalide à la ligne "+(i+1)+". Format attendu : nom, touche et usage.");
     return;
    }
