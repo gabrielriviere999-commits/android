@@ -349,7 +349,8 @@ elif SYSTEME == "Linux":
         "Shift": 0xFFE1, "Ctrl": 0xFFE3, "Alt": 0xFFE9,
         "Shift_R": 0xFFE2,                # XK_Shift_R
         "Ctrl_R": 0xFFE4,                 # XK_Control_R
-        "Win": 0xFFE7,                     # Super_L
+        "Win": 0xFFEB,                     # Super_L
+        "Win_R": 0xFFEC,                     # Super_R
         "Menu": XK_ISO_Level3_Shift,       # Menu = AltGr sous X11
         "ContextMenu": 0xFF67,             # touche Menu (XK_Menu)
         "IntlBackslash": 0x3C,             # touche >/< (keysym '<')
