@@ -61,12 +61,14 @@
   {
     "nom": "Arme 1",
     "touche": "1",
-    "usage": 30
+    "usage": 30,
+    "couleur": "#999999"
   },
   {
     "nom": "Arme 2",
     "touche": "2",
-    "usage": 31
+    "usage": 31,
+    "couleur": "#999999"
   },
   {
     "nom": "Revolver",
