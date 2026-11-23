@@ -1,0 +1,49 @@
+[
+  {
+    "touche": "Esc",
+    "usage": 41,
+    "nom": "Menu"
+  },
+  {
+    "touche": "Tab",
+    "usage": 43,
+    "nom": "-"
+  },
+  {
+    "touche": "Entrée",
+    "usage": 40,
+    "nom": "-"
+  },
+  {
+    "touche": "F",
+    "usage": 9,
+    "nom": "Trancher/Verser",
+    "couleur": "#999999"
+  },
+  {
+    "touche": "Espace",
+    "usage": 44,
+    "nom": "Prendre/Lâcher",
+    "couleur": "#AA6600"
+  },
+  {
+    "touche": "Ctrl",
+    "usage": 224,
+    "nom": "Courir"
+  },
+  {
+    "touche": "E",
+    "usage": 8,
+    "nom": "Émoticône"
+  },
+  {
+    "touche": "Shift Gauche",
+    "usage": 225,
+    "nom": "Changer de chef"
+  },
+  {
+    "touche": "Shift Droit",
+    "usage": 229,
+    "nom": "Changer de chef"
+  }
+]
