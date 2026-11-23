@@ -1,0 +1,87 @@
+[
+  {
+    "nom": "Inventaire",
+    "touche": "E",
+    "usage": 8
+  },
+  {
+    "nom": "Jeter",
+    "touche": "A / Q",
+    "usage": 20
+  },
+  {
+    "nom": "2e main",
+    "touche": "F",
+    "usage": 9
+  },
+  {
+    "nom": "Chat",
+    "touche": "T",
+    "usage": 23
+  },
+  {
+    "nom": "Commande",
+    "touche": "/",
+    "usage": 56
+  },
+  {
+    "nom": "Menu",
+    "touche": "Esc",
+    "usage": 41
+  },
+  {
+    "nom": "Joueurs",
+    "touche": "Tab",
+    "usage": 43
+  },
+  {
+    "nom": "Cacher interface",
+    "touche": "F1",
+    "usage": 58
+  },
+  {
+    "nom": "Capture d'écran",
+    "touche": "F2",
+    "usage": 59
+  },
+  {
+    "nom": "Debug",
+    "touche": "F3",
+    "usage": 60
+  },
+  {
+    "nom": "Caméra",
+    "touche": "F5",
+    "usage": 62
+  },
+  {
+    "nom": "Zoom",
+    "touche": "C",
+    "usage": 6
+  },
+  {
+    "nom": "S'accroupir",
+    "touche": "Shift",
+    "usage": 225
+  },
+  {
+    "nom": "Courir",
+    "touche": "Ctrl",
+    "usage": 224
+  },
+  {
+    "nom": "Sauter",
+    "touche": "Espace",
+    "usage": 44
+  },
+  {
+    "nom": "-",
+    "touche": "Entrée",
+    "usage": 40
+  },
+  {
+    "nom": "Retour arrière",
+    "touche": "⌫",
+    "usage": 42
+  }
+]
