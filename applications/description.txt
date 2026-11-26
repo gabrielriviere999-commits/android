@@ -101,17 +101,20 @@ Ou configurer et installer Shizuku et App Ops puis accorder cette autorisation
 
 Compatibilité : Android 5.0+
 
+
 Enregistrer
 -----------
 Copier un fichier vers le dossier de votre choix en utilisant le menu de partage.
 
 Compatibilité : Android 4.0.1+
 
+
 Clipboard image
 ---------------
 Copier une image le presse-papier en utilisant le menu de partage ou ouvrir avec.
 
 Compatibilité : Android 4.0.1+
+
 
 Clipboard base64
 ----------------
