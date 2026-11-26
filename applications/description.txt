@@ -143,19 +143,18 @@ Compatibilité Wi-Fi : Android 4.0.1
 
 Indexeur
 --------
-Créer un fichier docs.js comme index de recherche pour la page search.html
-Ajouter un chemin comme /storage/emulated/0/Documents
+Créer un fichier docs.js comme index de recherche pour la page search.htmlAjouter un chemin comme /storage/emulated/0/Documents
+Fonctions export/import de l'ensemble des chemins dans un champ de texte.
 
 Compatibilité : Android 4.0.1+
 
 
 Arbo
 ----
-Génèrer une arborescence de dossiers et fichiers dans un fichier arbo.html
-Les couleurs des éléments peuvent être changés.
+Génèrer une arborescence de dossiers et fichiers dans un fichier arbo.htmlLes couleurs des éléments peuvent être changés.
 Le nom de la racine peut être changée.
 Chaque fichier est un lien menant vers lui, une flèche à droite pour le télécharger.
-Ajouter un chemin comme /storage/emulated/0/Documents puis le sélectionner.
-Fonctions export/import de l'ensemble des profils dans le fichier /storage/emulated/0/arbo-profils.json
+Ajouter un chemin comme /storage/emulated/0/Documents.
+Fonctions export/import de l'ensemble des profils dans un champ de texte.
 
 Compatibilité : Android 4.0.1+
