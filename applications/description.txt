@@ -86,15 +86,15 @@ Palette de couleurs qui montre le code en HEX, RGB, HSL, HSV.
 L'option alpha ne fonctionne que pour HEX.
 Vous pouvez la lancer depuis les réglages rapides ou l'écran d'accueil.
 
-Compatibilité : Android 4.1+
+Compatibilité : Android 4.0.1+
 
 
-OCR Écran
----------
+Extracteur Texte
+----------------
 Permet d'extraire le texte à l'écran.
 Vous pouvez la lancer depuis les réglages rapides ou l'écran d'accueil.
 Cette application utilise PROJECT_MEDIA, pour accorder l'autorisation permanente :
-Commande adb : adb shell appops set com.gabriel.ocrecran PROJECT_MEDIA allow
+Commande adb : adb shell appops set com.gabriel.extracteurtexte PROJECT_MEDIA allow
 Ou configurer et installer Shizuku et App Ops puis accorder cette autorisation
 à l'application.
 
