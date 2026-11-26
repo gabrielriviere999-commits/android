@@ -68,13 +68,12 @@ Notes :
 Compatibilité : Android 4.4+
 
 
-Extraction Code Couleur
+Extracteur Couleur
 -----------------------
-Permet d'extraire le code couleur à l'écran.
-Codes couleurs disponibles dans le bouton Formats : HEX, RGB, HSL, HSV, CMYK
+Permet d'extraire le code couleur à l'écran au format HEX, RGB, HSL, HSV
 Vous pouvez la lancer depuis les réglages rapides ou l'écran d'accueil.
 Cette application utilise PROJECT_MEDIA, pour accorder l'autorisation permanente :
-Commande adb : adb shell appops set com.gabriel.extractioncodecouleur PROJECT_MEDIA allow
+Commande adb : adb shell appops set com.gabriel.extracteurcouleurs PROJECT_MEDIA allow
 Ou configurer et installer Shizuku et App Ops puis accorder cette autorisation
 à l'application.
 
@@ -144,9 +143,11 @@ https://gabrielriviere999-commits.github.io/android/applications/usage-action-cl
 Compatibilité Bluetooth HID : Android 9+
 Compatibilité Wi-Fi : Android 4.0.1
 
+
 Indexeur
 --------
-Créer un fichier docs.js comme index de recherche pour la page search.htmlAjouter un chemin comme /storage/emulated/0/Documents
+Créer un fichier docs.js comme index de recherche pour la page search.html
+Ajouter un chemin comme /storage/emulated/0/Documents
 Fonctions export/import de l'ensemble des chemins dans un champ de texte.
 
 Compatibilité : Android 4.0.1+
@@ -154,7 +155,8 @@ Compatibilité : Android 4.0.1+
 
 Arbo
 ----
-Génèrer une arborescence de dossiers et fichiers dans un fichier arbo.htmlLes couleurs des éléments peuvent être changés.
+Génèrer une arborescence de dossiers et fichiers dans un fichier arbo.html
+Les couleurs des éléments peuvent être changés.
 Le nom de la racine peut être changée.
 Chaque fichier est un lien menant vers lui, une flèche à droite pour le télécharger.
 Ajouter un chemin comme /storage/emulated/0/Documents.
