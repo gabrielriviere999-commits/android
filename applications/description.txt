@@ -30,17 +30,15 @@ Un éditeur de texte simple, léger et compatible avec les appareils anciens.
 Conçu pour être rapide, minimaliste et fiable, sans dépendances lourdes ni
 fonctionnalités superflues.
 
-Fonctionnalités principales :
+Fonctionnalités :
+- Thème noir ou sombre avec opacité et taille du texte réglables (menu style)
 - Multi-onglets
-- Ouverture et sauvegarde via le sélecteur de fichiers Android
-- Recherche avec surlignage et navigation
-- Remplacement de texte
-- Dupliquer la ligne courante
-- Supprimer la ligne courante
-- Coller à la position exacte du curseur
-- Boutons ↓ et ↑ pour aller tout en bas ou en haut du fichier
-- Le bouton Style ouvre un menu qui permet de changer la taille et la
-couleur du texte et la transparence d'arrière plan
+- Boutons ↑ et ↓ pour aller tout en haut ou tout en bas du fichier
+- Recherche et remplacement de texte multiligne (menu rechercher)
+- Ajouts/suppressions de débuts/fin de ligne
+- Dupliquer ou supprimer la ligne courante
+- Inverser la ligne courante avec celle du dessus
+- Mode dessin pour tracer des formes et placer du texte n'importe-où
 
 Raccourcis clavier (clavier physique ou Unexpected Keyboard) :
 - Ctrl + Z : Annuler
@@ -49,14 +47,15 @@ Raccourcis clavier (clavier physique ou Unexpected Keyboard) :
 - Ctrl + C : Copier
 - Ctrl + V : Coller
 - Ctrl + X : Couper
-- Ctrl + S : Sauvegarder (si supporté)
+- Ctrl + S : Sauvegarder
+- Ctrl + R : Recharger le fichier
+- Ctrl + F : Ouvrir le menu Rechercher et remplacer
+- Ctrl + J : Copier la ligne dans le presse-papiers
 - Ctrl + D : Dupliquer la ligne
-- Ctrl + Shift + D : Supprimer la ligne
-- Ctrl + F : Ouvrir le panneau rechercher/remplacer
-- Ctrl + G : Aller à l'occurence suivante
-- Ctrl + Shift + G : Aller à l'occurence précédente
-- Ctrl + R : Remplacer l'occurence active
-- Ctrl + Shift + R : Remplacer toutes les occurences
+- Ctrl + M : Échanger la ligne du curseur avec celle du dessus
+- Ctrl + Shift + L : Appliquer les ajouts/suppressions de texte de début/fin de lignes
+- Ctrl + Shift + D ou Ctrl + K : Supprimer la ligne
+- Ctrl + Shift + T : Transformer en tableau
 - Flèches : Navigation
 - Shift + Flèches : Sélection
 
