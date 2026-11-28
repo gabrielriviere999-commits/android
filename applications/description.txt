@@ -56,6 +56,7 @@ Raccourcis clavier (clavier physique ou Unexpected Keyboard) :
 - Ctrl + Shift + L : Appliquer les ajouts/suppressions de texte de début/fin de lignes
 - Ctrl + Shift + D ou Ctrl + K : Supprimer la ligne
 - Ctrl + Shift + T : Transformer en tableau
+- Ctrl + Shift + C : Transformer en CSV
 - Flèches : Navigation
 - Shift + Flèches : Sélection
 
